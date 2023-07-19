@@ -1,8 +1,6 @@
-const FormKitVariants = require('@formkit/themes/tailwindcss');
+const FormKitVariants = require("@formkit/themes/tailwindcss");
 
 module.exports = {
-    content: [
-        './tailwind-theme.js',
-    ],
-    plugins: [FormKitVariants],
-}
+  content: ["./tailwind-theme.js"],
+  plugins: [FormKitVariants],
+};
