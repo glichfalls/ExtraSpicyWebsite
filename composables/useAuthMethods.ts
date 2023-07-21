@@ -23,6 +23,16 @@ export const useAuthMethods = () => {
     }
   };
 
+  const tokenAuth = async (token: string): Promise<void> => {
+    const cookie = useCookie<{ user: User; token: string }>('auth', {
+      sameSite: 'lax',
+    });
+    // const user = await http.httpAuthGet<User>('/users/current', undefined, { token });
+    cookie.value = { null, token };
+    auth.token = token;
+    auth.user = null;
+  };
+
   const logout = (): void => {
     const cookie = useCookie<{ user: User; token: string }|null>('auth', {
       sameSite: 'lax',
@@ -52,6 +62,7 @@ export const useAuthMethods = () => {
   return {
     fetchUser,
     login,
+    tokenAuth,
     logout,
   };
 };
