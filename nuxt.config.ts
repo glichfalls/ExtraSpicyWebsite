@@ -4,6 +4,9 @@ export default defineNuxtConfig({
       title: 'Extra Spicy Website',
       charset: 'utf-8',
       viewport: 'width=device-width, initial-scale=1',
+      bodyAttrs: {
+        class: 'dark',
+      }
     }
   },
   css: [

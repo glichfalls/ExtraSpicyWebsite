@@ -5,6 +5,7 @@
       <div class="menu">
         <nuxt-link to="/">Home</nuxt-link>
         <nuxt-link to="/portfolio">Portfolio</nuxt-link>
+        <nuxt-link to="/stocks">Stocks</nuxt-link>
         <nuxt-link to="/logout">Sign out</nuxt-link>
       </div>
     </div>

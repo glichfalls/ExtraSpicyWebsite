@@ -25,9 +25,9 @@
 
       <div v-else>
         <vue-particles
-            id="rickroll"
-            :options="options"
-            :particles-init="particlesInit"
+          id="rickroll"
+          :options="options"
+          :particles-init="particlesInit"
         />
 
         <h1 class="text-center mb-4">
@@ -79,10 +79,10 @@ const particlesInit = async (engine: any) => {
 }
 
 const options = {
-  "fullScreen": {
-    "zIndex": 1
+  fullScreen: {
+    zIndex: 1
   },
-  "particles": {
+  particles: {
     "number": {
       "value": 0
     },
@@ -192,7 +192,7 @@ const options = {
     }
   },
   "emitters": {
-    "life": {
+    life: {
       "count": 0,
       "duration": 0.1,
       "delay": 0.4

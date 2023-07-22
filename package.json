@@ -32,6 +32,7 @@
     "@pinia/nuxt": "^0.4.11",
     "ag-grid-community": "^30.0.5",
     "ag-grid-vue3": "^30.0.5",
+    "chart.js": "^4.3.0",
     "dayjs": "^1.11.9",
     "flowbite": "^1.7.0",
     "flowbite-vue": "^0.0.16",
@@ -40,6 +41,7 @@
     "tsparticles": "^2.11.0",
     "tsparticles-engine": "^2.11.0",
     "typescript": "^5.1.6",
+    "vue-chartjs": "^5.2.0",
     "vue-qr": "^4.0.9",
     "vue3-particles": "^2.11.0"
   }
