@@ -1,7 +1,7 @@
 <template>
   <div v-if="isLoggedIn" class="w-full min-h-[50vh] flex flex-col gap-8 justify-center items-center">
 
-    <div class="flex gap-4">
+    <div class="flex flex-col lg:flex-row gap-4">
       <button v-if="!rickroll" class="bg-primary text-white py-2 px-4 rounded hover:bg-primary-500" @click="start">
         Show Portfolio
       </button>
@@ -17,20 +17,29 @@
 
     <div v-if="rickroll">
 
-      <vue-particles
-          id="rickroll"
-          :options="options"
-          :particles-init="particlesInit"
-      />
+      <div v-if="!videoLoaded">
+        <div class="flex justify-center items-center">
+          <icon name="svg-spinners:270-ring-with-bg" size="40px" />
+        </div>
+      </div>
 
-      <h1 class="text-center mb-4">
-        Hops gno {{ user?.firstName }}
-      </h1>
+      <div v-else>
+        <vue-particles
+            id="rickroll"
+            :options="options"
+            :particles-init="particlesInit"
+        />
 
-      <video playsinline autoplay>
-        <source :src="video" type="video/mp4" />
-      </video>
+        <h1 class="text-center mb-4">
+          Hops gno {{ user?.firstName }}
+        </h1>
+      </div>
+
     </div>
+
+    <video :class="!videoElement || !rickroll ? 'hidden' : ''" playsinline ref="videoElement">
+      <source :src="video" type="video/mp4" />
+    </video>
 
   </div>
 </template>
@@ -45,13 +54,27 @@ const { isLoggedIn, user } = storeToRefs(useAuth());
 const { httpPost } = useHttp();
 
 const rickroll = ref(false);
+const videoElement = ref<HTMLVideoElement|null>(null);
+const videoLoaded = ref(false);
 
 const start = async () => {
+  videoElement.value?.play();
   rickroll.value = true;
   await httpPost(`/rickrolled/${user.value?.firstName}`);
 };
 
-const particlesInit = async (engine) => {
+const preloadVideo = () => {
+  if (videoElement.value !== null) {
+    videoElement.value.addEventListener('loadeddata', () => {
+      videoLoaded.value = true;
+    });
+    videoElement.value.load();
+  }
+};
+
+onMounted(preloadVideo);
+
+const particlesInit = async (engine: any) => {
   await loadFull(engine);
 }
 

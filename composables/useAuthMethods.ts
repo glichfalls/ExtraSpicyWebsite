@@ -33,7 +33,7 @@ export const useAuthMethods = () => {
     console.log(user, token);
     cookie.value = { user, token };
     auth.token = token;
-    auth.user = null;
+    auth.user = user;
   };
 
   const logout = (): void => {
