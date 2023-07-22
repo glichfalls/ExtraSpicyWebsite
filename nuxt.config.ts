@@ -15,6 +15,7 @@ export default defineNuxtConfig({
         preconnect: false,
         preload: true,
         download: true,
+        fontsDir: 'assets/fonts',
         base64: true,
         overwriting: true,
       },

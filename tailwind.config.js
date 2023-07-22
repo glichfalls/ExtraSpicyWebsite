@@ -12,6 +12,7 @@ module.exports = {
             },
             secondary: '#f50057',
             tertiary: '#ff9800',
+            success: '#4caf50',
         }
     }
   }

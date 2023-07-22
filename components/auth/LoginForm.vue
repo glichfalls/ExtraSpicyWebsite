@@ -1,12 +1,8 @@
 <template>
   <div class="mt-4">
-    <form-kit type="form" @submit="submit" submit-label="Request Link">
+    <form-kit v-if="!linkSent" type="form" @submit="submit" submit-label="Request Link">
       <form-kit type="text" name="name" label="Telegram Username" validation="required" class="mb-4" />
     </form-kit>
-
-    <div v-if="devLink">
-      <a class="bg-tertiary py-1 px-2 rounded text-gray-900 text-xs" :href="devLink" target="_blank">Open Link</a>
-    </div>
 
     <div v-if="showBotQrCode" class="flex justify-between items-start gap-4 pt-4 mt-4 border-t border-gray-700">
       <vue-qr text="https://t.me/ExtraSpicySpamBot" :size="100" :margin="0" :correct-level="0" color-dark="#AAAAAA" color-light="transparent"/>
@@ -56,10 +52,10 @@ const trySendLink = async (name: string) => {
     const response = await httpPost<{ success: boolean; link: string|null }>('/auth/telegram', {
       name,
     });
-    console.log(response, response.success);
     if (response.success) {
       showBotQrCode.value = false;
       linkSent.value = true;
+      emit('submit', response.link);
     }
     if (response.success && response?.link) {
       // dev only, because telegram doesn't allow localhost in links
