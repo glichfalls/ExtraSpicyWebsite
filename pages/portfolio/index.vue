@@ -2,6 +2,10 @@
   <div>
     <h1>Portfolios</h1>
 
+    <div class="flex mb-4">
+      <form-kit type="select" label="Chat" :options="chats" @change="(e) => chatId = e.target.value" />
+    </div>
+
     <div class="h-[50vh]">
       <line-chart :data="dataset" :options="options" />
     </div>
@@ -9,6 +13,7 @@
 </template>
 
 <script setup lang="ts">
+// @ts-ignore eslint-disable-next-line no-unused-vars
 import {
   CategoryScale,
   Chart as ChartJS,
@@ -17,12 +22,11 @@ import {
   LineElement,
   PointElement,
   Title,
-  Tooltip,
+  Tooltip
 } from 'chart.js';
 import { Line as LineChart } from 'vue-chartjs';
-import { useAuth } from "~/store/auth";
-import { Portfolio } from "~/contract/entity";
-import { HydraResponse } from "~/contract/api";
+import { Portfolio } from '~/contract/entity';
+import { HydraResponse } from '~/contract/api';
 
 ChartJS.register(
   Title,
@@ -31,13 +35,19 @@ ChartJS.register(
   CategoryScale,
   PointElement,
   LinearScale,
-  LineElement,
+  LineElement
 );
 
 const { httpAuthGet } = useHttp();
-const { user } = useAuth();
 
 const data = ref<Portfolio[]>([]);
+const chatId = ref<string|null>('all');
+
+const chats = computed(() => {
+  const all = data.value.map(portfolio => portfolio.chat.name);
+  const nonUnique = all.filter(name => all.filter(n => n === name).length > 1);
+  return ['all', ...new Set(nonUnique)];
+});
 
 const dataset = computed(() => {
 
@@ -49,8 +59,18 @@ const dataset = computed(() => {
 
   const dates: { [key: string]: string } = {};
 
-  data.value.forEach((portfolio) => {
+  const portfolios = data.value.filter((portfolio) => {
+    if (chatId.value === 'all') {
+      return true;
+    }
+    return portfolio.chat.name === chatId.value;
+  });
 
+  if (chatId.value === null) {
+    chatId.value = portfolios[0].chat.name;
+  }
+
+  portfolios.forEach((portfolio) => {
     const transactions = portfolio.transactions;
 
     transactions.sort((a, b) => {
@@ -59,7 +79,7 @@ const dataset = computed(() => {
 
     transactions.forEach((t) => {
       const date = new Date(t.createdAt);
-      dates[date.getTime()] = `${ date.getDate() }/${ date.getMonth() + 1 }/${ date.getFullYear() }`;
+      dates[date.getTime()] = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
     });
   });
 
@@ -73,7 +93,7 @@ const dataset = computed(() => {
   // array of unique labels
   const labels = [...new Set(Object.values(dates))];
 
-  const sets = data.value.map((portfolio) => {
+  const sets = portfolios.map((portfolio) => {
     const transactions = portfolio.transactions;
     const color = colors[Math.floor(Math.random() * colors.length)];
     colors = colors.filter((c) => c !== color);
@@ -95,21 +115,20 @@ const dataset = computed(() => {
     });
 
     return {
-      name: portfolio.user.name,
+      name: portfolio.user.name || 'Unknown',
       color,
-      points,
+      points
     };
   });
 
   return {
     labels,
-    datasets: sets.map((set) => ({
+    datasets: sets.map((set: any) => ({
       label: set.name,
-      // random color
       borderColor: set.color,
       backgroundColor: set.color,
-      data: set.points,
-    })),
+      data: set.points
+    }))
   };
 });
 
@@ -118,24 +137,20 @@ const options = {
   scales: {
     y: {
       grid: {
-        color: '#ffffff',
+        color: '#ffffff'
       },
       ticks: {
-        color: '#ffffff',
+        color: '#ffffff'
       },
-      beginAtZero: true,
-    },
-  },
+      beginAtZero: true
+    }
+  }
 };
 
 const load = async () => {
-  const response = await httpAuthGet<HydraResponse<Portfolio>>('/api/portfolios', {
-    'portfolio.user.id': user?.id,
-  });
-
+  const response = await httpAuthGet<HydraResponse<Portfolio>>('/api/portfolios');
   data.value = response['hydra:member'];
-  console.log(response);
-}
+};
 
 await load();
 

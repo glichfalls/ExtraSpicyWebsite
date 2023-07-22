@@ -18,6 +18,7 @@ export interface Stock extends HydraEntity {
 
 export interface Portfolio extends HydraEntity {
     id: string;
+    chat: Chat;
     user: User;
     // eslint-disable-next-line no-use-before-define
     transactions: StockTransaction[];
