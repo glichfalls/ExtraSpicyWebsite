@@ -6,6 +6,11 @@ export default defineNuxtConfig({
       viewport: 'width=device-width, initial-scale=1',
     }
   },
+  css: [
+    'ag-grid-community/styles/ag-grid.css',
+    'ag-grid-community/styles/ag-theme-alpine.css',
+    'ag-grid-community/styles/ag-theme-material.css',
+  ],
   modules: [
     '@nuxtjs/tailwindcss',
     '@formkit/nuxt',

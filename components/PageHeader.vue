@@ -4,6 +4,7 @@
       <h1>乇❎ㄒ尺卂 丂🅱️丨匚ㄚ 丂🅱️卂爪( ﾟーﾟ) ♿️</h1>
       <div class="menu">
         <nuxt-link to="/">Home</nuxt-link>
+        <nuxt-link to="/portfolio">Portfolio</nuxt-link>
         <nuxt-link to="/logout">Sign out</nuxt-link>
       </div>
     </div>

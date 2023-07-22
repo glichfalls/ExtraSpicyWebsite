@@ -1,8 +1,13 @@
-const FormKitVariants = require('@formkit/themes/tailwindcss');
-
 module.exports = {
-  content: ['./tailwind-theme.js'],
-  plugins: [FormKitVariants],
+  content: [
+    './tailwind-theme.js',
+    'node_modules/flowbite-vue/**/*.{js,jsx,ts,tsx}',
+    'node_modules/flowbite/**/*.{js,jsx,ts,tsx}'
+  ],
+  plugins: [
+    require('@formkit/themes/tailwindcss'),
+    require('flowbite/plugin'),
+  ],
   theme: {
     extend: {
         colors: {
