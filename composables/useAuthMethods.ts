@@ -29,7 +29,8 @@ export const useAuthMethods = () => {
     const cookie = useCookie<{ user: CookieUser; token: string }>('auth', {
       sameSite: 'lax'
     });
-    const user = await http.httpAuthGet<User>('/auth/me', undefined, { token });
+    const user = await http.httpAuthGet<User>('/api/me', undefined, { token });
+    console.log(user, token);
     cookie.value = { user, token };
     auth.token = token;
     auth.user = null;
@@ -50,7 +51,7 @@ export const useAuthMethods = () => {
     });
     if (cookie.value) {
       try {
-        auth.user = await http.httpAuthGet('/users/current', undefined, {
+        auth.user = await http.httpAuthGet('/api/me', undefined, {
           token: cookie.value?.token
         });
         auth.token = cookie.value.token;
@@ -58,6 +59,8 @@ export const useAuthMethods = () => {
         logout();
         throw e;
       }
+    } else {
+      console.log('no cookie');
     }
   };
 

@@ -12,5 +12,6 @@
 body {
   font-family: 'Inter', sans-serif;
   @apply bg-gray-900;
+  @apply h-[100vh];
 }
 </style>

@@ -1,6 +1,16 @@
 <template>
-  <div>
-    <Dialog :static="true" :open="false" class="relative z-50" @close="setIsOpen">
+  <TransitionRoot
+      :show="isOpen"
+      as="template"
+      enter="duration-300 ease-out"
+      enter-from="opacity-0"
+      enter-to="opacity-100"
+      leave="duration-200 ease-in"
+      leave-from="opacity-100"
+      leave-to="opacity-0"
+  >
+    <Dialog class="relative z-50">
+      <div class="fixed inset-0 bg-black/30" aria-hidden="true" />
       <div class="fixed inset-0 flex items-center justify-center p-4">
         <DialogPanel class="w-full max-w-sm rounded border border-gray-700 bg-gray-800 text-gray-400 rounded-lg p-4">
           <DialogTitle>
@@ -16,7 +26,7 @@
         </DialogPanel>
       </div>
     </Dialog>
-  </div>
+  </TransitionRoot>
 </template>
 
 <script setup>
@@ -24,11 +34,16 @@ import {
   Dialog,
   DialogPanel,
   DialogTitle,
-  DialogDescription
+  DialogDescription,
+  TransitionRoot
 } from '@headlessui/vue';
 import LoginForm from '~/components/auth/LoginForm.vue';
 
-const isOpen = ref(false);
+const props = defineProps({
+  open: Boolean,
+});
+
+const isOpen = ref(true);
 
 function setIsOpen (value) {
   isOpen.value = value;

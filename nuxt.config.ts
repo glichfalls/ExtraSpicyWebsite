@@ -8,6 +8,7 @@ export default defineNuxtConfig({
       {
         families: {
           'Inter': true,
+          'Permanent Marker': true,
         },
         display: 'swap',
         prefetch: false,
@@ -15,6 +16,7 @@ export default defineNuxtConfig({
         preload: true,
         download: true,
         base64: true,
+        overwriting: true,
       },
     ],
     'nuxt-icon',

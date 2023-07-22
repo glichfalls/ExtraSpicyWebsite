@@ -2,20 +2,16 @@
   <header class="header">
     <h1>乇❎ㄒ尺卂 丂🅱️丨匚ㄚ 丂🅱️卂爪( ﾟーﾟ) ♿️</h1>
 
-    <login-modal :open="loginActive" />
+    <login-modal v-if="!isLoggedIn" />
   </header>
 </template>
 
 <script setup lang="ts">
 import LoginModal from '~/components/auth/LoginModal.vue';
+import { useAuth } from '~/store/auth';
+import { storeToRefs } from 'pinia';
 
-const loginActive = ref<boolean>(false);
-
-const login = () => {
-  loginActive.value = true;
-  console.log('hi');
-};
-
+const { isLoggedIn } = storeToRefs(useAuth());
 </script>
 
 <style scoped lang="scss">
