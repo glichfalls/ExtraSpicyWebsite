@@ -134,10 +134,28 @@ const dataset = computed(() => {
 
 const options = {
   maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      labels: {
+        color: '#ffffff',
+        font: {
+          family: 'Inter'
+        }
+      }
+    }
+  },
   scales: {
+    x: {
+      grid: {
+        color: '#111111'
+      },
+      ticks: {
+        color: '#ffffff'
+      }
+    },
     y: {
       grid: {
-        color: '#ffffff'
+        color: '#111111'
       },
       ticks: {
         color: '#ffffff'
