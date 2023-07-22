@@ -36,5 +36,11 @@ export default defineNuxtConfig({
   devtools: {
     enabled: true
   },
+  plugins: [
+    {
+      src: '~/plugins/vue3-particles.ts',
+      mode: 'client',
+    },
+  ],
   ssr: false,
 });
