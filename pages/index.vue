@@ -3,15 +3,15 @@
 
     <div class="flex flex-col lg:flex-row gap-4">
       <button v-if="!rickroll" class="bg-primary text-white py-2 px-4 rounded hover:bg-primary-500" @click="start">
-        Show Portfolio
+        Portfolio
       </button>
 
       <button v-if="!rickroll" class="bg-primary text-white py-2 px-4 rounded hover:bg-primary-500" @click="start">
-        Show Bank
+        Bank
       </button>
 
       <button v-if="!rickroll" class="bg-primary text-white py-2 px-4 rounded hover:bg-primary-500" @click="start">
-        Show Ehre
+        Ehre
       </button>
     </div>
 

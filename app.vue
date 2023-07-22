@@ -17,7 +17,8 @@ const { isLoggedIn } = storeToRefs(useAuth());
 body {
   font-family: 'Inter', sans-serif;
   @apply bg-gray-900 text-gray-400 text-lg;
-  @apply h-[100vh];
+  @apply min-h-[100vh];
+  @apply overflow-x-hidden max-w-[100vw];
 }
 h1, h2, h3, h4, h5, h6 {
   @apply text-gray-100 text-xl font-bold block;
