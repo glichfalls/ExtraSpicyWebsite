@@ -1719,6 +1719,16 @@
   "resolved" "https://registry.npmjs.org/acorn/-/acorn-8.10.0.tgz"
   "version" "8.10.0"
 
+"ag-grid-community@^30.0.5", "ag-grid-community@~30.0.5":
+  "integrity" "sha512-3AXrNx5hnH0/c4QNgNv5ub1Kna3wVPecCFq2ddMYQ6b7Ob8JhU4bMwcBf+GOiDepVc6I+Df6Bop6rGrc4O8OZw=="
+  "resolved" "https://registry.npmjs.org/ag-grid-community/-/ag-grid-community-30.0.5.tgz"
+  "version" "30.0.5"
+
+"ag-grid-vue3@^30.0.5":
+  "integrity" "sha512-VFrsUz4srDd9KmJcnTvb9UbSmwSAzm7L8HJ/eeYEKKulMCv0RGwdVYtgOBIK7eDUVipBsXcAsBK/rzxniYGw0w=="
+  "resolved" "https://registry.npmjs.org/ag-grid-vue3/-/ag-grid-vue3-30.0.5.tgz"
+  "version" "30.0.5"
+
 "agent-base@^6.0.2":
   "integrity" "sha512-RZNwNclF7+MS/8bDg70amg32dyeZGZxiDuQmZxKLAlQjr3jGyLx+4Kkk58UO7D2QdgFIQCovuSuZESne6RG6XQ=="
   "resolved" "https://registry.npmjs.org/agent-base/-/agent-base-6.0.2.tgz"

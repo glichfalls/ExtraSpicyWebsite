@@ -30,6 +30,7 @@ export default defineNuxtConfig({
   build: {
     transpile: [
       'vue-qr',
+      'ag-grid-vue',
     ],
   },
   devtools: {

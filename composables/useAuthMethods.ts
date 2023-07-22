@@ -59,8 +59,6 @@ export const useAuthMethods = () => {
         logout();
         throw e;
       }
-    } else {
-      console.log('no cookie');
     }
   };
 

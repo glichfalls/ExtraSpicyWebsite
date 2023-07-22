@@ -16,8 +16,9 @@
 <style scoped lang="scss">
 
 main {
+  @apply container mx-auto;
   @apply block;
-  @apply p-2;
+  @apply py-4;
 }
 
 </style>

@@ -30,6 +30,8 @@
     "@headlessui/vue": "^1.7.14",
     "@nuxtjs/google-fonts": "^3.0.2",
     "@pinia/nuxt": "^0.4.11",
+    "ag-grid-community": "^30.0.5",
+    "ag-grid-vue3": "^30.0.5",
     "dayjs": "^1.11.9",
     "pinia": "^2.1.4",
     "sass": "^1.64.0",

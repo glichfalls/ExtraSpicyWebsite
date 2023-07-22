@@ -1,8 +1,11 @@
 import { defineStore } from 'pinia';
+import { HydraEntity } from '~/contract/entity';
 
-export type User = {
+export interface User extends HydraEntity {
   id: string;
   name: string;
+  firstName: string;
+  lastName: string;
   roles: string[];
 };
 
