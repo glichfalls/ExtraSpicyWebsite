@@ -4,18 +4,19 @@
       <form-kit type="text" name="name" label="Telegram Username" validation="required" class="mb-4" />
     </form-kit>
 
-    <div v-if="showBotQrCode" class="flex justify-between items-start gap-4 pt-4 mt-4 border-t border-gray-700">
-      <vue-qr text="https://t.me/ExtraSpicySpamBot" :size="100" :margin="0" :correct-level="0" color-dark="#AAAAAA" color-light="transparent"/>
-      <div class="">
-        <div class="text-sm">
-          We cant find your username.
-          Start a Chat with <a target="_blank" href="https://t.me/ExtraSpicySpamBot">the bot</a> and send him a message.
-        </div>
-        <div class="mt-2" v-if="loading">
-          <icon name="svg-spinners:270-ring-with-bg" />
+    <div v-if="showBotQrCode" class="pt-4 mt-4 border-t border-gray-700">
+      <div class="flex justify-between items-start gap-4">
+        <vue-qr text="https://t.me/ExtraSpicySpamBot" :size="100" :margin="0" :correct-level="0" color-dark="#AAAAAA" color-light="transparent"/>
+        <div class="">
+          <div class="text-sm">
+            We cant find your username.
+            Start a Chat with <a class="text-tertiary" target="_blank" href="https://t.me/ExtraSpicySpamBot">the bot</a> and send him a message.
+          </div>
+          <div class="mt-2" v-if="loading">
+            <icon name="svg-spinners:270-ring-with-bg" />
+          </div>
         </div>
       </div>
-
     </div>
   </div>
 </template>
@@ -34,6 +35,7 @@ const interval = ref<any>(null);
 const loading = ref(false);
 
 const submit = async (form: { name: string }) => {
+  interval.value = null;
   await trySendLink(form.name);
   if (!linkSent.value) {
     interval.value = setInterval(async () => {
@@ -42,7 +44,7 @@ const submit = async (form: { name: string }) => {
         clearInterval(interval.value);
         linkSent.value = false;
       }
-    }, 5000);
+    }, 5_000);
   }
 };
 
