@@ -2,6 +2,8 @@ import { useCookie } from '#app';
 import { useHttp } from '~/composables/useHttp';
 import { useAuth, User } from '~/store/auth';
 
+type CookieUser = User|null;
+
 export const useAuthMethods = () => {
   const auth = useAuth();
   const http = useHttp();
@@ -9,12 +11,12 @@ export const useAuthMethods = () => {
   const login = async (email: string, password: string): Promise<void> => {
     const response: any = await http.httpPost('/login', {
       username: email,
-      password,
+      password
     });
 
     if (response.token) {
-      const cookie = useCookie<{ user: User; token: string }>('auth', {
-        sameSite: 'lax',
+      const cookie = useCookie<{ user: CookieUser; token: string }>('auth', {
+        sameSite: 'lax'
       });
       const user = await http.httpAuthGet<User>('/users/current', undefined, { token: response.token });
       cookie.value = response;
@@ -24,18 +26,18 @@ export const useAuthMethods = () => {
   };
 
   const tokenAuth = async (token: string): Promise<void> => {
-    const cookie = useCookie<{ user: User; token: string }>('auth', {
-      sameSite: 'lax',
+    const cookie = useCookie<{ user: CookieUser; token: string }>('auth', {
+      sameSite: 'lax'
     });
-    // const user = await http.httpAuthGet<User>('/users/current', undefined, { token });
-    cookie.value = { null, token };
+    const user = await http.httpAuthGet<User>('/auth/me', undefined, { token });
+    cookie.value = { user, token };
     auth.token = token;
     auth.user = null;
   };
 
   const logout = (): void => {
-    const cookie = useCookie<{ user: User; token: string }|null>('auth', {
-      sameSite: 'lax',
+    const cookie = useCookie<{ user: CookieUser; token: string }|null>('auth', {
+      sameSite: 'lax'
     });
     cookie.value = null;
     auth.token = null;
@@ -43,13 +45,13 @@ export const useAuthMethods = () => {
   };
 
   const fetchUser = async (): Promise<void> => {
-    const cookie = useCookie<{ user: User; token: string }>('auth', {
-      sameSite: 'lax',
+    const cookie = useCookie<{ user: CookieUser; token: string }>('auth', {
+      sameSite: 'lax'
     });
     if (cookie.value) {
       try {
         auth.user = await http.httpAuthGet('/users/current', undefined, {
-          token: cookie.value?.token,
+          token: cookie.value?.token
         });
         auth.token = cookie.value.token;
       } catch (e) {
@@ -63,6 +65,6 @@ export const useAuthMethods = () => {
     fetchUser,
     login,
     tokenAuth,
-    logout,
+    logout
   };
 };

@@ -5,53 +5,12 @@
     "node": true
   },
   "extends": [
-    "@nuxtjs/eslint-config-typescript",
-    "airbnb-base"
+    "@nuxtjs/eslint-config-typescript"
   ],
   "plugins": [
     "@typescript-eslint"
   ],
   "rules": {
-    "max-len": ["error", {
-      "code": 200,
-      "ignoreComments": true,
-      "ignoreStrings": true,
-      "ignoreTemplateLiterals": true
-    }],
-    "no-console": 0,
-    "no-restricted-syntax": 0,
-    "vue/no-v-html": 0,
-    "vue/html-self-closing": ["error", {
-      "html": {
-        "void": "always",
-        "normal": "always",
-        "component": "always"
-      },
-      "svg": "never",
-      "math": "never"
-    }],
-    "import/no-unresolved": 0,
-    "vue/max-attributes-per-line": ["error", { "singleline": 5 }],
-    "vue/multiline-html-element-content-newline": ["error", {
-      "allowEmptyLines": true
-    }],
-    "import/extensions": [
-      1,
-      "never",
-      {
-        "pattern": { "vue": "always", "svg": "always", "json": "always" }
-      }
-    ],
-    "vue/multi-word-component-names": "off",
-    "import/no-extraneous-dependencies": "off",
-    "no-unused-vars": "off",
-    "import/prefer-default-export": "off",
-    "no-underscore-dangle":  ["error", { "allow": ["_data"] }],
-    "object-curly-newline": ["error", {
-      "ImportDeclaration": "never",
-      "ExportDeclaration": { "multiline": false, "minProperties": 5 }
-    }],
-    "no-shadow": "off",
-    "@typescript-eslint/no-shadow": ["error"]
+    "semi": ["error", "always"]
   }
 }

@@ -20,15 +20,20 @@
     "@typescript-eslint/parser": "^5.62.0",
     "esbuild": "^0.13.4",
     "eslint": "^8.45.0",
-    "eslint-config-airbnb-base": "^15.0.0",
     "nuxt": "^3.6.3",
-    "typescript": "^5.1.6"
+    "nuxt-icon": "^0.4.2"
   },
   "dependencies": {
     "@formkit/icons": "^0.17.4",
     "@formkit/nuxt": "^0.17.4",
     "@formkit/themes": "^0.17.4",
+    "@headlessui/vue": "^1.7.14",
+    "@nuxtjs/google-fonts": "^3.0.2",
     "@pinia/nuxt": "^0.4.11",
-    "pinia": "^2.1.4"
+    "dayjs": "^1.11.9",
+    "pinia": "^2.1.4",
+    "sass": "^1.64.0",
+    "typescript": "^5.1.6",
+    "vue-qr": "^4.0.9"
   }
 }

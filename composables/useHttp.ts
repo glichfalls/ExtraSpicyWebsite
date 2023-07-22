@@ -1,6 +1,6 @@
 import { showError } from '#app';
-import { useRuntimeConfig } from '#imports';
 import { computed } from 'vue';
+import { useRuntimeConfig } from '#imports';
 import { useAuth } from '~/store/auth';
 
 interface HttpFetchOptions {
@@ -18,27 +18,27 @@ export const useHttp = () => {
   const handle401 = () => {
     throw showError({
       statusCode: 401,
-      statusMessage: 'auth token invalid',
+      statusMessage: 'auth token invalid'
     });
   };
 
   const headers = computed(() => {
     const values: any = {
       Accept: 'application/ld+json',
-      'Content-Type': 'application/ld+json',
+      'Content-Type': 'application/ld+json'
     };
     return values;
   });
 
   const get = <T>(endpoint: string, data: any = undefined): Promise<T> =>
-    // eslint-disable-next-line no-undef,implicit-arrow-linebreak
+
     $fetch<any>(endpoint, {
       baseURL: config.public.apiUrl,
       params: data,
       method: 'GET',
-      headers: headers.value,
+      headers: headers.value
     })
-      .catch(async (error) => {
+      .catch((error) => {
         throw error;
       });
 
@@ -51,14 +51,14 @@ export const useHttp = () => {
     if (options.token !== undefined) {
       authGetHeaders.Authorization = `Bearer ${options.token}`;
     }
-    // eslint-disable-next-line no-undef
+
     return $fetch<T>(endpoint, {
       baseURL: config.public.apiUrl,
       params: data,
       method: 'GET',
-      headers: authGetHeaders,
+      headers: authGetHeaders
     })
-      .catch(async (error) => {
+      .catch((error) => {
         if (error?.response?.status === 401) {
           handle401();
         }
@@ -78,14 +78,13 @@ export const useHttp = () => {
       postHeaders.Authorization = `Bearer ${auth.token}`;
     }
 
-    // eslint-disable-next-line no-undef
     return $fetch<T>(url, {
       baseURL: config.public.apiUrl,
       method: 'POST',
       body: data,
-      headers: postHeaders,
+      headers: postHeaders
     })
-      .catch(async (error) => {
+      .catch((error) => {
         if (error?.response?.status === 401) {
           handle401();
         }
@@ -98,12 +97,12 @@ export const useHttp = () => {
     if (auth.token) {
       putHeaders.Authorization = `Bearer ${auth.token}`;
     }
-    // eslint-disable-next-line no-undef
+
     return $fetch(url, {
       baseURL: config.public.apiUrl,
       method: 'PUT',
       body: data,
-      headers: putHeaders,
+      headers: putHeaders
     });
   };
 
@@ -113,11 +112,10 @@ export const useHttp = () => {
       deleteHeaders.Authorization = `Bearer ${auth.token}`;
     }
 
-    // eslint-disable-next-line no-undef
     return $fetch(url, {
       baseURL: config.public.apiUrl,
       method: 'DELETE',
-      headers: deleteHeaders,
+      headers: deleteHeaders
     });
   };
   return {
@@ -125,6 +123,6 @@ export const useHttp = () => {
     httpAuthGet,
     httpPost,
     httpPut,
-    httpDelete,
+    httpDelete
   };
 };
