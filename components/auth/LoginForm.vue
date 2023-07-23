@@ -10,7 +10,7 @@
         <div class="">
           <div class="text-sm">
             We cant find your username.
-            Start a Chat with <a class="text-tertiary" target="_blank" href="https://t.me/ExtraSpicySpamBot">the bot</a> and send him a message.
+            Start a Chat with <telegram-logo /> <a class="text-primary" target="_blank" href="https://t.me/ExtraSpicySpamBot">the bot</a> and send him a message.
           </div>
           <div class="mt-2" v-if="loading">
             <icon name="svg-spinners:270-ring-with-bg" />
@@ -23,6 +23,7 @@
 
 <script setup lang="ts">
 import vueQr from "vue-qr/src/packages/vue-qr.vue";
+import TelegramLogo from '~/components/TelegramLogo.vue';
 
 const emit = defineEmits(['submit']);
 
