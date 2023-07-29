@@ -1,20 +1,35 @@
 <template>
   <div>
-    <flow-bite-table>
+    <flow-bite-table >
       <table-head>
         <table-head-cell v-for="column in columns" :key="column">
-          {{ column }}
+          <div class="flex items-center gap-4">
+            <icon v-if="loading" name="svg-spinners:90-ring" />
+            <span>{{ column }}</span>
+            <input type="text"
+              v-model="filter.search[column]"
+              :disabled="loading"
+              placeholder="Search"
+              class="search-input"
+            />
+          </div>
         </table-head-cell>
+        <table-head-cell />
       </table-head>
       <table-body>
-        <table-row v-for="item in filteredData" :key="item.id">
-          <table-cell v-for="column in columns" :key="column">
-            {{ item[column] }}
+        <table-row v-for="(item, k) in filteredData" :key="k">
+          <table-cell v-for="column in columns" :key="k" class="text-left">
+            <slot :name="`column-${column}`" :item="item">
+              {{ item[column] }}
+            </slot>
+          </table-cell>
+          <table-cell>
+            <slot name="actions" :item="item" />
           </table-cell>
         </table-row>
       </table-body>
     </flow-bite-table>
-    <flow-bite-pagination v-model="page" :total-items="total" :per-page="30" class="mt-4" />
+    <flow-bite-pagination v-if="total > 30" v-model="page" :total-items="total" :per-page="30" class="mt-4" />
   </div>
 </template>
 <script setup lang="ts">
@@ -28,6 +43,7 @@ import {
   TableRow
 } from 'flowbite-vue';
 import { HydraResponse } from "~/contract/api";
+import { HydraEntity } from '~/contract/entity';
 
 const { httpAuthGet } = useHttp();
 
@@ -51,25 +67,45 @@ const props = defineProps({
 
 const page = ref(1);
 const total = ref(0);
+const loading = ref(false);
+const filter = reactive<any>({
+  search: {},
+});
 
-const data = ref(props.data);
+const rows = ref<HydraEntity[]>(props.data as HydraEntity[]);
 
 watch(page, async () => {
   await load(page.value);
 });
 
-const columns = computed(() => {
-  const allColumns = data.value.length > 0 ? Object.keys(data.value[0]) : [];
-  return props.columns.filter(column => allColumns.includes(column));
+watch(filter, async () => {
+  debouncedLoading();
+}, { deep: true });
+
+const filterQuery = computed(() => {
+  const query: any = {};
+  for (const column in filter.search) {
+    if (filter.search[column]) {
+      query[column] = filter.search[column];
+    }
+  }
+  return query;
+});
+
+const columns = computed<string[]>(() => {
+  const allColumns: string[] = rows.value.length > 0 ? Object.keys(rows.value[0]) : [];
+  if (allColumns.length === 0) {
+    return props.columns as string[];
+  }
+  return (props.columns as string[]).filter((column: string) => allColumns.includes(column));
 });
 
 const filteredData = computed(() => {
-  return data.value.map(item => {
-    const filteredItem = {};
+  return rows.value.map(item => {
+    const filteredItem: any = {};
     for (const column of columns.value) {
-      // Handle nested properties, e.g., "user.name"
       const keys = column.split('.');
-      let value = item;
+      let value: any = item;
       for (const key of keys) {
         if (value && typeof value === 'object') {
           value = value[key];
@@ -84,13 +120,33 @@ const filteredData = computed(() => {
   });
 });
 
+
+const debounceTimeout = ref<any>(null);
+const debouncedLoading = () => {
+  if (debounceTimeout.value) {
+    clearTimeout(debounceTimeout.value);
+  }
+  debounceTimeout.value = setTimeout(async () => {
+    debounceTimeout.value = null;
+    await load();
+  }, 500);
+}
+
 const load = async (page: number = 1) => {
   if (props.url !== null) {
-    const response = await httpAuthGet<HydraResponse<any>>(props.url, {
-      page: page,
-    });
-    data.value = response['hydra:member'];
-    total.value = response['hydra:totalItems'];
+    try {
+      loading.value = true;
+      const response = await httpAuthGet<HydraResponse<HydraEntity>>(props.url, {
+        page: page,
+        ...filterQuery.value,
+      });
+      rows.value = response['hydra:member'];
+      total.value = response['hydra:totalItems'];
+    } catch (e) {
+      console.error(e);
+    } finally {
+      loading.value = false;
+    }
   }
 }
 
@@ -99,3 +155,11 @@ if (props.url) {
 }
 
 </script>
+
+<style scoped lang="scss">
+.search-input {
+  @apply bg-transparent text-white;
+  @apply border-none focus:border-0 active:border-0;
+  @apply text-xs font-normal;
+}
+</style>

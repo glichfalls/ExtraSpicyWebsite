@@ -3,11 +3,30 @@ import { User } from "~/store/auth";
 export interface HydraEntity {
     '@id': string;
     '@type': string;
+    id: string;
+}
+
+export interface ChatConfig extends HydraEntity {
+    id: string;
+    chat: Chat;
+    passiveHonorEnabled: boolean;
+    passiveHonorAmount: number;
 }
 
 export interface Chat extends HydraEntity {
     id: string;
     name: string;
+    config: ChatConfig;
+}
+
+export interface Message extends HydraEntity {
+    id: string;
+    chat: Chat;
+    user: User;
+    telegramMessageId: number|null;
+    telegramThreadId: number|null;
+    message: string;
+    createdAt: string;
 }
 
 export interface Stock extends HydraEntity {
@@ -41,5 +60,11 @@ export interface StockTransaction extends HydraEntity {
     updatedAt: Date;
 }
 
-
+export interface Sticker extends HydraEntity {
+    id: string;
+    file: {
+        id: string;
+        filePath: string;
+    }
+}
 

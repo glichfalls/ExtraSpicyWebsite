@@ -1,10 +1,11 @@
 <template>
   <header v-if="isLoggedIn" class="header">
     <div class="container">
-      <h1>乇❎ㄒ尺卂 丂🅱️丨匚ㄚ 丂🅱️卂爪( ﾟーﾟ) ♿️</h1>
+      <h1 >Extra Spicy Spam</h1>
       <div class="menu">
         <nuxt-link to="/">Home</nuxt-link>
         <nuxt-link to="/portfolio">Portfolio</nuxt-link>
+        <nuxt-link to="/chats">Chats</nuxt-link>
         <nuxt-link to="/stocks">Stocks</nuxt-link>
         <nuxt-link to="/logout">Sign out</nuxt-link>
       </div>

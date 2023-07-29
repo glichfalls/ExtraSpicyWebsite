@@ -10,9 +10,7 @@ export default defineNuxtConfig({
     }
   },
   css: [
-    'ag-grid-community/styles/ag-grid.css',
-    'ag-grid-community/styles/ag-theme-alpine.css',
-    'ag-grid-community/styles/ag-theme-material.css',
+    '~/assets/css/main.css',
   ],
   modules: [
     '@nuxtjs/tailwindcss',
