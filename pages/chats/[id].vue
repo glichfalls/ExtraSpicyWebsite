@@ -12,7 +12,7 @@
     </div>
 
     <div class="flex mt-3 gap-4">
-      <message-viewer :chatId="id" class="w-1/2" />
+      <message-viewer :chatId="id" live class="w-1/2" />
       <div class="w-1/2">
         <h2>Member List</h2>
       </div>

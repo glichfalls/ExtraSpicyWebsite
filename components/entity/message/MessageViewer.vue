@@ -9,6 +9,9 @@
         <span class="text">{{ message.message }}</span>
         <span class="timestamp">{{ formatDate(message.createdAt) }}</span>
       </div>
+      <div v-if="loading" class="loader absolute bottom-full">
+        <icon v-if="loading" name="svg-spinners:90-ring" />
+      </div>
     </div>
   </div>
 </template>
@@ -24,6 +27,10 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  live: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const { httpAuthGet } = useHttp();
@@ -34,6 +41,7 @@ const messages = ref<Message[]>([]);
 const page = ref<number>(1);
 const total = ref<number>(0);
 const prevScrollHeight = ref<number>(0);
+const liveReloadInterval = ref<any>(null);
 
 const formatDate = (date: string): string => format(new Date(date), 'HH:mm');
 const formatChatDate = (date: string): string => format(new Date(date), 'd. MMM');
@@ -41,6 +49,10 @@ const formatChatDate = (date: string): string => format(new Date(date), 'd. MMM'
 const reversedMessages = computed(() => messages.value.slice().reverse());
 
 const url = computed(() => `/api/messages?chat.id=${props.chatId}`);
+
+const latestMessageDate = computed(() => {
+  return messages.value[0]?.createdAt;
+});
 
 const userDisplayName = (user: User) => {
   if (user.name) {
@@ -66,9 +78,10 @@ const load = async () => {
 const loadMore = async () => {
   try {
     loading.value = true;
-    const response = await httpAuthGet<HydraResponse<Message>>(url.value, {
+    const params: any = {
       page: page.value + 1,
-    });
+    };
+    const response = await httpAuthGet<HydraResponse<Message>>(url.value, params);
     messages.value = [...messages.value, ...response['hydra:member']];
     total.value = response['hydra:totalItems'];
     page.value = page.value + 1;
@@ -79,9 +92,25 @@ const loadMore = async () => {
   }
 }
 
+const loadNew = async () => {
+  try {
+    loading.value = true;
+    const params: any = {};
+    if (latestMessageDate.value) {
+      params['createdAt[strictly_after]'] = latestMessageDate.value;
+    }
+    const response = await httpAuthGet<HydraResponse<Message>>(url.value, params);
+    messages.value = [...messages.value, ...response['hydra:member']];
+  } catch(error) {
+    console.error(error);
+  } finally {
+    loading.value = false;
+  }
+}
+
 const handleScroll = async () => {
   if (chat.value) {
-    if (chat.value.scrollTop === 0 && messages.value.length < total.value) {
+    if (chat.value.scrollTop < 600 && messages.value.length < total.value && !loading.value) {
       prevScrollHeight.value = chat.value.scrollHeight;
       await loadMore();
       chat.value.scrollTop = chat.value.scrollHeight - prevScrollHeight.value;
@@ -92,6 +121,21 @@ const handleScroll = async () => {
 onMounted(async () => {
   await load();
   scrollToBottom();
+  if (props.live) {
+    liveReloadInterval.value = setInterval(async () => {
+      await loadNew();
+    }, 3000);
+  } else {
+    if (liveReloadInterval.value) {
+      clearInterval(liveReloadInterval.value);
+    }
+  }
+});
+
+onBeforeUnmount(() => {
+  if (liveReloadInterval.value) {
+    clearInterval(liveReloadInterval.value);
+  }
 });
 
 const scrollToBottom = (): void => {
@@ -102,7 +146,7 @@ const scrollToBottom = (): void => {
 
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="postcss">
 .message-viewer {
   @apply w-full;
   @apply bg-gray-950 text-white;
@@ -144,6 +188,5 @@ const scrollToBottom = (): void => {
     @apply absolute right-2 bottom-2;
     @apply text-xs;
   }
-
 }
 </style>
