@@ -47,6 +47,12 @@ export default defineNuxtConfig({
       'ag-grid-vue',
     ],
   },
+  postcss: {
+    plugins: {
+      tailwindcss: {},
+        autoprefixer: {},
+    }
+  },
   devtools: {
     enabled: true
   },

@@ -18,10 +18,13 @@
     "@nuxtjs/tailwindcss": "^6.8.0",
     "@types/node": "^18.16.19",
     "@typescript-eslint/parser": "^5.62.0",
+    "autoprefixer": "^10.4.14",
     "esbuild": "^0.13.4",
     "eslint": "^8.45.0",
     "nuxt": "^3.6.3",
-    "nuxt-icon": "^0.4.2"
+    "nuxt-icon": "^0.4.2",
+    "postcss": "^8.4.27",
+    "tailwindcss": "^3.3.3"
   },
   "dependencies": {
     "@formkit/icons": "^0.17.4",
