@@ -4,6 +4,12 @@
       <form-kit type="text" name="name" label="Telegram Username" validation="required" class="mb-4" />
     </form-kit>
 
+    <div v-if="hasHttpError" class="pt-4 mt-4 border-t border-gray-700">
+      <div class="text-sm text-red">
+        Something went wrong. Please try again later.
+      </div>
+    </div>
+
     <div v-if="showBotQrCode" class="pt-4 mt-4 border-t border-gray-700">
       <div class="flex justify-between items-start gap-4">
         <vue-qr text="https://t.me/ExtraSpicySpamBot" :size="100" :margin="0" :correct-level="0" color-dark="#AAAAAA" color-light="transparent"/>
@@ -30,6 +36,7 @@ const emit = defineEmits(['submit']);
 const { httpPost } = useHttp();
 
 const devLink = ref<string|null>(null);
+const hasHttpError = ref(false);
 const showBotQrCode = ref(false);
 const linkSent = ref(false);
 const interval = ref<any>(null);
@@ -38,7 +45,7 @@ const loading = ref(false);
 const submit = async (form: { name: string }) => {
   interval.value = null;
   await trySendLink(form.name);
-  if (!linkSent.value) {
+  if (!linkSent.value && !hasHttpError.value) {
     interval.value = setInterval(async () => {
       await trySendLink(form.name);
       if (linkSent.value) {
@@ -46,12 +53,15 @@ const submit = async (form: { name: string }) => {
         linkSent.value = false;
       }
     }, 5_000);
+  } else {
+    clearInterval(interval.value);
   }
 };
 
 const trySendLink = async (name: string) => {
   try {
     loading.value = true;
+    hasHttpError.value = false;
     const response = await httpPost<{ success: boolean; link: string|null }>('/auth/telegram', {
       name,
     });
@@ -64,10 +74,15 @@ const trySendLink = async (name: string) => {
       // dev only, because telegram doesn't allow localhost in links
       devLink.value = response.link;
     }
-  } catch (error) {
-    console.error(error);
+  } catch (error: any) {
     linkSent.value = false;
-    showBotQrCode.value = true;
+    if (error?.status === 404) {
+      showBotQrCode.value = true;
+      hasHttpError.value = false;
+    } else {
+      showBotQrCode.value = false;
+      hasHttpError.value = true;
+    }
   }
 }
 
