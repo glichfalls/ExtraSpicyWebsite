@@ -17,15 +17,16 @@
     </v-data-table-server>
   </div>
 </template>
-<script setup lang="ts">
+<script setup lang="ts" generic="T extends HydraEntity">
 import { VDataTableServer } from 'vuetify/labs/VDataTable';
 import { HydraResponse } from "~/contract/api";
 import { HydraEntity } from '~/contract/entity';
+import { Ref } from 'vue';
 
 const { httpAuthGet } = useHttp();
 
 const props = defineProps<{
-  data?: HydraEntity[],
+  data?: T[],
   url?: string,
   columns: any[],
 }>();
@@ -38,7 +39,8 @@ const filter = reactive<any>({
   search: {},
 });
 
-const rows = ref<HydraEntity[]>(props.data || []);
+// https://github.com/vuejs/core/issues/2136#issuecomment-908269949
+const rows = ref<T[]>(props.data || []) as Ref<T[]>;
 
 watch(page, async () => {
   await load({ page: page.value });
@@ -73,11 +75,19 @@ const debouncedLoading = () => {
   }, 500);
 }
 
-const load = async ({ page = 1, itemsPerPage = null, sortBy = null } = {}) => {
-  if (props.url !== null) {
+const load = async ({
+  page = 1,
+  itemsPerPage,
+  sortBy,
+}: {
+  page?: number;
+  itemsPerPage?: number;
+  sortBy?: string
+} = {}) => {
+  if (props.url) {
     try {
       loading.value = true;
-      const response = await httpAuthGet<HydraResponse<HydraEntity>>(props.url, {
+      const response = await httpAuthGet<HydraResponse<T>>(props.url, {
         page: page,
         ...filterQuery.value,
       });
