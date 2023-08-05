@@ -1,19 +1,14 @@
 <template>
   <div>
     <page-header />
-    <main class="px-4 lg:px-0">
+    <v-main class="px-4 lg:px-0">
       <slot />
-    </main>
-    <footer>
-      <slot name="footer" />
-    </footer>
+    </v-main>
+    <page-footer />
   </div>
 </template>
 
-<script setup lang="ts">
-
-</script>
-<style scoped lang="scss">
+<style scoped lang="postcss">
 
 main {
   @apply container mx-auto;

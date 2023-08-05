@@ -1,8 +1,10 @@
 <template>
-  <NuxtLayout>
-    <NuxtPage/>
-    <login-modal v-if="!isLoggedIn" />
-  </NuxtLayout>
+  <v-app>
+    <NuxtLayout>
+      <NuxtPage/>
+      <login-modal v-if="!isLoggedIn" />
+    </NuxtLayout>
+  </v-app>
 </template>
 
 <script setup lang="ts">
@@ -13,7 +15,7 @@ const { isLoggedIn } = storeToRefs(useAuth());
 </script>
 
 
-<style lang="scss">
+<style lang="postcss">
 body {
   font-family: 'Inter', sans-serif;
   @apply bg-gray-900 text-gray-400 text-lg;

@@ -1,86 +1,56 @@
 <template>
   <div>
-    <flow-bite-table >
-      <table-head>
-        <table-head-cell v-for="column in columns" :key="column">
-          <div class="flex items-center gap-4">
-            <icon v-if="loading" name="svg-spinners:90-ring" />
-            <span>{{ column }}</span>
-            <input type="text"
-              v-model="filter.search[column]"
-              :disabled="loading"
-              placeholder="Search"
-              class="search-input"
-            />
-          </div>
-        </table-head-cell>
-        <table-head-cell />
-      </table-head>
-      <table-body>
-        <table-row v-for="(item, k) in filteredData" :key="k">
-          <table-cell v-for="column in columns" :key="k" class="text-left">
-            <slot :name="`column-${column}`" :item="item">
-              {{ item[column] }}
-            </slot>
-          </table-cell>
-          <table-cell>
-            <slot name="actions" :item="item" />
-          </table-cell>
-        </table-row>
-      </table-body>
-    </flow-bite-table>
-    <flow-bite-pagination v-if="total > 30" v-model="page" :total-items="total" :per-page="30" class="mt-4" />
+    <v-data-table-server
+        v-model:items-per-page="itemsPerPage"
+        :items-length="total"
+        :headers="columns"
+        :items="rows"
+        :loading="loading"
+        @update:options="load"
+    >
+      <template v-for="column in columns" #[`item.${column.key}`]="{ item }">
+        <slot :name="column.key" :item="item.selectable" />
+      </template>
+      <template v-slot:bottom>
+        <v-pagination v-if="pageCount > 1" v-model="page" :length="pageCount" />
+      </template>
+    </v-data-table-server>
   </div>
 </template>
 <script setup lang="ts">
-import {
-  Table as FlowBiteTable,
-  Pagination as FlowBitePagination,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeadCell,
-  TableRow
-} from 'flowbite-vue';
+import { VDataTableServer } from 'vuetify/labs/VDataTable';
 import { HydraResponse } from "~/contract/api";
 import { HydraEntity } from '~/contract/entity';
 
 const { httpAuthGet } = useHttp();
 
-const props = defineProps({
-  data: {
-    type: Array,
-    required: false,
-    default: [],
-  },
-  url: {
-    type: String,
-    required: false,
-    default: null,
-  },
-  columns: {
-    type: Array,
-    required: false,
-    default: [],
-  }
-});
+const props = defineProps<{
+  data?: HydraEntity[],
+  url?: string,
+  columns: any[],
+}>();
 
 const page = ref(1);
+const itemsPerPage = ref(30);
 const total = ref(0);
 const loading = ref(false);
 const filter = reactive<any>({
   search: {},
 });
 
-const rows = ref<HydraEntity[]>(props.data as HydraEntity[]);
+const rows = ref<HydraEntity[]>(props.data || []);
 
 watch(page, async () => {
-  await load(page.value);
+  await load({ page: page.value });
 });
 
 watch(filter, async () => {
   debouncedLoading();
 }, { deep: true });
+
+const pageCount = computed(() => {
+  return Math.ceil(total.value / itemsPerPage.value);
+});
 
 const filterQuery = computed(() => {
   const query: any = {};
@@ -91,35 +61,6 @@ const filterQuery = computed(() => {
   }
   return query;
 });
-
-const columns = computed<string[]>(() => {
-  const allColumns: string[] = rows.value.length > 0 ? Object.keys(rows.value[0]) : [];
-  if (allColumns.length === 0) {
-    return props.columns as string[];
-  }
-  return (props.columns as string[]).filter((column: string) => allColumns.includes(column));
-});
-
-const filteredData = computed(() => {
-  return rows.value.map(item => {
-    const filteredItem: any = {};
-    for (const column of columns.value) {
-      const keys = column.split('.');
-      let value: any = item;
-      for (const key of keys) {
-        if (value && typeof value === 'object') {
-          value = value[key];
-        } else {
-          value = undefined;
-          break;
-        }
-      }
-      filteredItem[column] = value;
-    }
-    return filteredItem;
-  });
-});
-
 
 const debounceTimeout = ref<any>(null);
 const debouncedLoading = () => {
@@ -132,7 +73,7 @@ const debouncedLoading = () => {
   }, 500);
 }
 
-const load = async (page: number = 1) => {
+const load = async ({ page = 1, itemsPerPage = null, sortBy = null } = {}) => {
   if (props.url !== null) {
     try {
       loading.value = true;
@@ -150,13 +91,11 @@ const load = async (page: number = 1) => {
   }
 }
 
-if (props.url) {
-  await load();
-}
+load();
 
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="postcss">
 .search-input {
   @apply bg-transparent text-white;
   @apply border-none focus:border-0 active:border-0;

@@ -34,6 +34,7 @@ export default defineNuxtConfig({
       },
     ],
     'nuxt-icon',
+    '@invictus.codes/nuxt-vuetify',
   ],
   runtimeConfig: {
     public: {
@@ -44,8 +45,19 @@ export default defineNuxtConfig({
   build: {
     transpile: [
       'vue-qr',
-      'ag-grid-vue',
     ],
+  },
+  vuetify: {
+    vuetifyOptions: {
+      theme: false,
+    },
+    moduleOptions: {
+      treeshaking: true,
+      useIconCDN: false,
+      styles: 'sass',
+      autoImport: true,
+      useVuetifyLabs: true,
+    }
   },
   postcss: {
     plugins: {

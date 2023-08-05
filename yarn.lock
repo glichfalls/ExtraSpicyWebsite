@@ -560,6 +560,16 @@
   dependencies:
     "@iconify/types" "^2.0.0"
 
+"@invictus.codes/nuxt-vuetify@^0.3.0":
+  "integrity" "sha512-Rc2fIzq4CFUlmUHudQBBjyy+yVTlZeevsqh4cuGqPcIdUNWYJRrWFHl5bsp/lfNS5iDYElSBxefWJOD4wFc4gA=="
+  "resolved" "https://registry.npmjs.org/@invictus.codes/nuxt-vuetify/-/nuxt-vuetify-0.3.0.tgz"
+  "version" "0.3.0"
+  dependencies:
+    "@nuxt/kit" "^3.6.2"
+    "defu" "^6.1.2"
+    "vite-plugin-vuetify" "^1.0.2"
+    "vuetify" "^3.3.7"
+
 "@ioredis/commands@^1.1.1":
   "integrity" "sha512-Sx1pU8EM64o2BrqNpEO1CNLtKQwyhuXuqyfH7oGKCk+1a33d2r5saW8zNwm3j6BTExtjrv2BxTgzzkMwts6vGg=="
   "resolved" "https://registry.npmjs.org/@ioredis/commands/-/commands-1.2.0.tgz"
@@ -822,7 +832,7 @@
     "which" "^3.0.1"
     "ws" "^8.13.0"
 
-"@nuxt/kit@^3.2.0", "@nuxt/kit@^3.3.1", "@nuxt/kit@^3.5.0", "@nuxt/kit@^3.5.3", "@nuxt/kit@^3.6.1", "@nuxt/kit@^3.6.5", "@nuxt/kit@3.6.5":
+"@nuxt/kit@^3.2.0", "@nuxt/kit@^3.3.1", "@nuxt/kit@^3.5.0", "@nuxt/kit@^3.5.3", "@nuxt/kit@^3.6.1", "@nuxt/kit@^3.6.2", "@nuxt/kit@^3.6.5", "@nuxt/kit@3.6.5":
   "integrity" "sha512-uBI5I2Zx6sk+vRHU+nBmifwxg/nyXCGZ1g5hUKrUfgv1ZfiKB8JkN5T9iRoduDOaqbwM6XSnEl1ja73iloDcrw=="
   "resolved" "https://registry.npmjs.org/@nuxt/kit/-/kit-3.6.5.tgz"
   "version" "3.6.5"
@@ -1593,6 +1603,14 @@
   "integrity" "sha512-7OjdcV8vQ74eiz1TZLzZP4JwqM5fA94K6yntPS5Z25r9HDuGNzaGdgvwKYq6S+MxwF0TFRwe50fIR/MYnakdkQ=="
   "resolved" "https://registry.npmjs.org/@vue/shared/-/shared-3.3.4.tgz"
   "version" "3.3.4"
+
+"@vuetify/loader-shared@^1.7.1":
+  "integrity" "sha512-kLUvuAed6RCvkeeTNJzuy14pqnkur8lTuner7v7pNE/kVhPR97TuyXwBSBMR1cJeiLiOfu6SF5XlCYbXByEx1g=="
+  "resolved" "https://registry.npmjs.org/@vuetify/loader-shared/-/loader-shared-1.7.1.tgz"
+  "version" "1.7.1"
+  dependencies:
+    "find-cache-dir" "^3.3.2"
+    "upath" "^2.0.1"
 
 "@vueuse/core@9.3.0":
   "integrity" "sha512-64Rna8IQDWpdrJxgitDg7yv1yTp41ZmvV8zlLEylK4QQLWAhz1OFGZDPZ8bU4lwcGgbEJ2sGi2jrdNh4LttUSQ=="
@@ -3957,6 +3975,23 @@
   dependencies:
     "to-regex-range" "^5.0.1"
 
+"find-cache-dir@^3.3.2":
+  "integrity" "sha512-wXZV5emFEjrridIgED11OoUKLxiYjAcqot/NJdAkOhlJ+vGzwhOAfcG5OX1jP+S0PcjEn8bdMJv+g2jwQ3Onig=="
+  "resolved" "https://registry.npmjs.org/find-cache-dir/-/find-cache-dir-3.3.2.tgz"
+  "version" "3.3.2"
+  dependencies:
+    "commondir" "^1.0.1"
+    "make-dir" "^3.0.2"
+    "pkg-dir" "^4.1.0"
+
+"find-up@^4.0.0":
+  "integrity" "sha512-PpOwAdQ/YlXQ2vj8a3h8IipDuYRi3wceVQQGYWxNINccq40Anw7BlsEXCMbt1Zt+OLA6Fq9suIpIWD0OsnISlw=="
+  "resolved" "https://registry.npmjs.org/find-up/-/find-up-4.1.0.tgz"
+  "version" "4.1.0"
+  dependencies:
+    "locate-path" "^5.0.0"
+    "path-exists" "^4.0.0"
+
 "find-up@^4.1.0":
   "integrity" "sha512-PpOwAdQ/YlXQ2vj8a3h8IipDuYRi3wceVQQGYWxNINccq40Anw7BlsEXCMbt1Zt+OLA6Fq9suIpIWD0OsnISlw=="
   "resolved" "https://registry.npmjs.org/find-up/-/find-up-4.1.0.tgz"
@@ -5494,6 +5529,13 @@
   dependencies:
     "pify" "^3.0.0"
 
+"make-dir@^3.0.2":
+  "integrity" "sha512-g3FeP20LNwhALb/6Cz6Dd4F2ngze0jz7tbzrD2wAV+o9FeNHe4rL+yK2md0J/fiSf1sa1ADhXqi5+oVwOM/eGw=="
+  "resolved" "https://registry.npmjs.org/make-dir/-/make-dir-3.1.0.tgz"
+  "version" "3.1.0"
+  dependencies:
+    "semver" "^6.0.0"
+
 "make-dir@^3.1.0":
   "integrity" "sha512-g3FeP20LNwhALb/6Cz6Dd4F2ngze0jz7tbzrD2wAV+o9FeNHe4rL+yK2md0J/fiSf1sa1ADhXqi5+oVwOM/eGw=="
   "resolved" "https://registry.npmjs.org/make-dir/-/make-dir-3.1.0.tgz"
@@ -6565,6 +6607,13 @@
   "integrity" "sha512-saLsH7WeYYPiD25LDuLRRY/i+6HaPYr6G1OUlN39otzkSTxKnubR9RTxS3/Kk50s1g2JTgFwWQDQyplC5/SHZg=="
   "resolved" "https://registry.npmjs.org/pirates/-/pirates-4.0.6.tgz"
   "version" "4.0.6"
+
+"pkg-dir@^4.1.0":
+  "integrity" "sha512-HRDzbaKjC+AOWVXxAU/x54COGeIv9eb+6CkDSQoNTt4XyWoIJvuPsXizxu/Fr23EiekbtZwmh1IcIG/l/a10GQ=="
+  "resolved" "https://registry.npmjs.org/pkg-dir/-/pkg-dir-4.2.0.tgz"
+  "version" "4.2.0"
+  dependencies:
+    "find-up" "^4.0.0"
 
 "pkg-types@^1.0.3":
   "integrity" "sha512-nN7pYi0AQqJnoLPC9eHFQ8AcyaixBUOwvqc5TDnIKCMEE6I0y8P7OKA7fPexsXGCGxQDl/cmrLAp26LhcwxZ4A=="
@@ -8548,7 +8597,7 @@
     "for-each" "^0.3.3"
     "is-typed-array" "^1.1.9"
 
-"typescript@*", "typescript@^5.1.6", "typescript@>=2.8.0 || >= 3.2.0-dev || >= 3.3.0-dev || >= 3.4.0-dev || >= 3.5.0-dev || >= 3.6.0-dev || >= 3.6.0-beta || >= 3.7.0-dev || >= 3.7.0-beta", "typescript@>=4.4.4":
+"typescript@*", "typescript@^5.1.6", "typescript@>=2.8.0 || >= 3.2.0-dev || >= 3.3.0-dev || >= 3.4.0-dev || >= 3.5.0-dev || >= 3.6.0-dev || >= 3.6.0-beta || >= 3.7.0-dev || >= 3.7.0-beta", "typescript@>=4.4.4", "typescript@>=4.7":
   "integrity" "sha512-zaWCozRZ6DLEWAWFrVDz1H6FVXzUSfTy5FUMWsQlU8Ym5JP9eO4xkTIROFCQvhQf61z6O/G6ugw3SgAnvvm+HA=="
   "resolved" "https://registry.npmjs.org/typescript/-/typescript-5.1.6.tgz"
   "version" "5.1.6"
@@ -8724,6 +8773,11 @@
     "mri" "^1.2.0"
     "scule" "^1.0.0"
 
+"upath@^2.0.1":
+  "integrity" "sha512-1uEe95xksV1O0CYKXo8vQvN1JEbtJp7lb7C5U9HMsIp6IVwntkH/oNUzyVNQSd4S1sYk2FpSSW44FqMc8qee5w=="
+  "resolved" "https://registry.npmjs.org/upath/-/upath-2.0.1.tgz"
+  "version" "2.0.1"
+
 "update-browserslist-db@^1.0.11":
   "integrity" "sha512-dCwEFf0/oT85M1fHBg4F0jtLwJrutGoHSQXCh7u4o2t1drG+c0a9Flnqww6XUKSfQMPpJBRjU8d4RXB09qtvaA=="
   "resolved" "https://registry.npmjs.org/update-browserslist-db/-/update-browserslist-db-1.0.11.tgz"
@@ -8847,7 +8901,16 @@
     "magic-string" "^0.30.0"
     "shell-quote" "^1.8.0"
 
-"vite@*", "vite@^3.0.0 || ^4.0.0", "vite@^3.0.0-0 || ^4.0.0-0", "vite@^3.1.0 || ^4.0.0", "vite@^4.0.0", "vite@>=2", "vite@>=2.0.0":
+"vite-plugin-vuetify@^1.0.0-alpha.12", "vite-plugin-vuetify@^1.0.2":
+  "integrity" "sha512-MubIcKD33O8wtgQXlbEXE7ccTEpHZ8nPpe77y9Wy3my2MWw/PgehP9VqTp92BLqr0R1dSL970Lynvisx3UxBFw=="
+  "resolved" "https://registry.npmjs.org/vite-plugin-vuetify/-/vite-plugin-vuetify-1.0.2.tgz"
+  "version" "1.0.2"
+  dependencies:
+    "@vuetify/loader-shared" "^1.7.1"
+    "debug" "^4.3.3"
+    "upath" "^2.0.1"
+
+"vite@*", "vite@^2.7.0 || ^3.0.0 || ^4.0.0", "vite@^3.0.0 || ^4.0.0", "vite@^3.0.0-0 || ^4.0.0-0", "vite@^3.1.0 || ^4.0.0", "vite@^4.0.0", "vite@>=2", "vite@>=2.0.0":
   "integrity" "sha512-4mvsTxjkveWrKDJI70QmelfVqTm+ihFAb6+xf4sjEU2TmUCTlVX87tmg/QooPEMQb/lM9qGHT99ebqPziEd3wg=="
   "resolved" "https://registry.npmjs.org/vite/-/vite-4.4.4.tgz"
   "version" "4.4.4"
@@ -8988,6 +9051,11 @@
   dependencies:
     "tsparticles-engine" "^2.11.0"
     "vue" "^3.3.4"
+
+"vuetify@^3.0.0-beta.4", "vuetify@^3.3.11", "vuetify@^3.3.7":
+  "integrity" "sha512-hlbSgxXCcEu4VelJMRHKhvLpaitLsruHvdvolbqbCS6Z64XoulUDw3CQ9ay6WGBL7uckmop0bUYidD2d8mN0UQ=="
+  "resolved" "https://registry.npmjs.org/vuetify/-/vuetify-3.3.11.tgz"
+  "version" "3.3.11"
 
 "wait-on@^7.0.1":
   "integrity" "sha512-9AnJE9qTjRQOlTZIldAaf/da2eW0eSRSgcqq85mXQja/DW3MriHxkpODDSUEg+Gri/rKEcXUZHe+cevvYItaog=="

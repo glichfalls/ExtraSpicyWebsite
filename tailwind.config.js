@@ -20,6 +20,7 @@ module.exports = {
             primary: {
               DEFAULT: '#3f51b5',
               500: '#3f51b5',
+              300: '#7986cb',
             },
             secondary: '#f50057',
             tertiary: '#ff9800',
