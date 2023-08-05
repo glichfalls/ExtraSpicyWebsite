@@ -1,7 +1,7 @@
 <template>
   <div>
     <page-header />
-    <v-main class="px-4 lg:px-0">
+    <v-main class="lg:px-0">
       <slot />
     </v-main>
     <page-footer />

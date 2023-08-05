@@ -49,7 +49,18 @@ export default defineNuxtConfig({
   },
   vuetify: {
     vuetifyOptions: {
-      theme: false,
+      theme: {
+        defaultTheme: 'custom',
+        themes: {
+          custom: {
+            dark: true,
+            colors: {
+              primary: '#3f51b5',
+              secondary: '#ff9800',
+            },
+          }
+        }
+      }
     },
     moduleOptions: {
       treeshaking: true,
