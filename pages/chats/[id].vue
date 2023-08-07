@@ -15,6 +15,12 @@
       <message-viewer :chatId="id" live class="w-1/2" />
       <div class="w-1/2">
         <h2>Member List</h2>
+        <ul>
+          <li v-for="user in chat?.users" :key="user.id">
+            <span>{{ user.firstName }}</span>
+            <span v-if="user.name">({{ user.name }})</span>
+          </li>
+        </ul>
       </div>
     </div>
 

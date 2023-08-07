@@ -17,6 +17,7 @@ export interface Chat extends HydraEntity {
     id: string;
     name: string;
     config: ChatConfig;
+    users: User[];
 }
 
 export interface Message extends HydraEntity {

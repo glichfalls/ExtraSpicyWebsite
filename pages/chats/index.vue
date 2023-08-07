@@ -1,26 +1,22 @@
 <template>
   <div>
     <h1>Chats</h1>
-    <hydra-table url="/api/chats" :columns="columns">
-      <template #actions="{ item }">
-        <router-link :to="`/chats/${item.id}`" class="view">
-          <icon name="heroicons-outline:eye" />
-        </router-link>
-      </template>
-      <template #name="{ item }">
-        <td>
-          {{ item.name }}
-        </td>
-      </template>
-    </hydra-table>
+    <chat-table url="/api/chats" :columns="columns" :actions="actions" />
   </div>
 </template>
 
 <script setup lang="ts">
-import HydraTable from '~/components/table/HydraTable.vue';
+import HydraTable, { HydraTableAction, Column } from '~/components/table/HydraTable.vue';
+import { Chat } from '~/contract/entity';
 
-const columns = [
+const ChatTable: typeof HydraTable<Chat, keyof Chat> = HydraTable;
+
+const columns: Column[] = [
   { title: 'Chat Name', align: 'start', sortable: true, key: 'name' },
 ];
+
+const actions: HydraTableAction[] = [
+  { type: 'view', path: (item: Chat) => `/chats/${item.id}` },
+]
 
 </script>

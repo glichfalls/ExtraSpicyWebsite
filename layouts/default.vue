@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="min-h-[100vh]">
     <page-header />
     <v-main class="lg:px-0">
       <slot />

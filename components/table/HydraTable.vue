@@ -1,23 +1,32 @@
 <template>
-  <div>
-    <v-data-table-server
-        v-model:items-per-page="itemsPerPage"
-        :items-length="total"
-        :headers="columns"
-        :items="rows"
-        :loading="loading"
-        @update:options="load"
-    >
-      <template v-for="column in columns" #[`item.${column.key}`]="{ item }">
-        <slot :name="column.key" :item="item.selectable" />
-      </template>
-      <template v-slot:bottom>
-        <v-pagination v-if="pageCount > 1" v-model="page" :length="pageCount" />
-      </template>
-    </v-data-table-server>
-  </div>
+  <v-data-table-server
+      v-model:items-per-page="itemsPerPage"
+      :items-length="total"
+      :headers="allColumns"
+      :items="rows"
+      :loading="loading"
+      @update:options="load"
+  >
+    <template v-for="column in columns" #[`item.${String(column.key)}`]="{ item } : { item: { selectable: T } }">
+      <slot :name="column.key" :item="item.selectable" :value="item.selectable[column.key]">
+        <td>
+          {{ item.selectable[column.key] || '-' }}
+        </td>
+      </slot>
+    </template>
+    <template v-slot:item.actions="{ item }: { item: { selectable: T } }">
+        <template v-for="action in actions">
+          <nuxt-link v-if="action.type == 'view'" class="font-bold hover:text-primary" :to="action.path(item.selectable)">
+            <icon name="heroicons-outline:eye" />
+          </nuxt-link>
+        </template>
+    </template>
+    <template v-slot:bottom>
+      <v-pagination v-if="pageCount > 1" v-model="page" :length="pageCount" />
+    </template>
+  </v-data-table-server>
 </template>
-<script setup lang="ts" generic="T extends HydraEntity">
+<script setup lang="ts" generic="T extends HydraEntity, K extends keyof T">
 import { VDataTableServer } from 'vuetify/labs/VDataTable';
 import { HydraResponse } from "~/contract/api";
 import { HydraEntity } from '~/contract/entity';
@@ -25,10 +34,29 @@ import { Ref } from 'vue';
 
 const { httpAuthGet } = useHttp();
 
+export type ViewAction = {
+  type: 'view',
+  path: (item: T) => string,
+}
+
+export type DeleteAction = {
+  type: 'delete',
+}
+
+export type HydraTableAction = ViewAction|DeleteAction;
+
+export type Column = {
+  title: string,
+  key: K,
+  sortable?: boolean,
+  align?: 'start' | 'center' | 'end',
+}
+
 const props = defineProps<{
   data?: T[],
   url?: string,
-  columns: any[],
+  columns: Column[],
+  actions?: HydraTableAction[],
 }>();
 
 const page = ref(1);
@@ -42,16 +70,18 @@ const filter = reactive<any>({
 // https://github.com/vuejs/core/issues/2136#issuecomment-908269949
 const rows = ref<T[]>(props.data || []) as Ref<T[]>;
 
-watch(page, async () => {
-  await load({ page: page.value });
-});
+watch(page, () => load({ page: page.value }));
+watch(filter, () => debouncedLoading(), { deep: true });
 
-watch(filter, async () => {
-  debouncedLoading();
-}, { deep: true });
+const pageCount = computed(() => Math.ceil(total.value / itemsPerPage.value));
 
-const pageCount = computed(() => {
-  return Math.ceil(total.value / itemsPerPage.value);
+const allColumns = computed(() => {
+  return [...props.columns, {
+    title: 'Actions',
+    key: 'actions',
+    sortable: false,
+    align: 'end',
+  }];
 });
 
 const filterQuery = computed(() => {
@@ -100,8 +130,6 @@ const load = async ({
     }
   }
 }
-
-load();
 
 </script>
 

@@ -27,7 +27,7 @@
               We sent you a link to your Telegram account. Click on it to login.
 
               <span class="block mt-4" v-if="link">
-                <a class="bg-primary py-1 px-2 rounded text-gray-100 text-xs" :href="link" target="_blank">Open Link</a>
+                <a class="bg-primary py-1 px-2 rounded text-gray-100 text-xs" :href="link">Open Link</a>
               </span>
             </span>
           </DialogDescription>
