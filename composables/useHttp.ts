@@ -15,6 +15,21 @@ export const useHttp = () => {
   const config = useRuntimeConfig();
   const auth = useAuth();
 
+  const getCache = (endpoint: string) => {
+    if (window.sessionStorage.getItem(endpoint)) {
+        return JSON.parse(window.sessionStorage.getItem(endpoint) as string);
+    }
+    return null;
+  }
+
+  const hasCache = (endpoint: string) => {
+    return window.sessionStorage.getItem(endpoint) !== null;
+  }
+
+  const setCache = (endpoint: string, data: any) => {
+    window.sessionStorage.setItem(endpoint, JSON.stringify(data));
+  }
+
   const handle401 = () => {
     throw showError({
       statusCode: 401,
@@ -30,9 +45,8 @@ export const useHttp = () => {
     return values;
   });
 
-  const get = <T>(endpoint: string, data: any = undefined): Promise<T> =>
-
-    $fetch<any>(endpoint, {
+  const get = async <T>(endpoint: string, data: any = undefined): Promise<T> => {
+    const response = await $fetch<any>(endpoint, {
       baseURL: config.public.apiUrl,
       params: data,
       method: 'GET',
@@ -42,9 +56,14 @@ export const useHttp = () => {
         throw error;
       });
 
-  const httpAuthGet = <T>(endpoint: string, data: any = undefined, options: HttpFetchOptions = {}): Promise<T> => {
-    const authGetHeaders: any = headers.value;
+    return response;
+  }
 
+  const httpAuthGet = async <T>(endpoint: string, data: any = undefined, options: HttpFetchOptions = {}): Promise<T> => {
+    const authGetHeaders: any = headers.value;
+    if (hasCache(endpoint)) {
+      return getCache(endpoint);
+    }
     if (auth.token) {
       authGetHeaders.Authorization = `Bearer ${auth.token}`;
     }
@@ -52,7 +71,7 @@ export const useHttp = () => {
       authGetHeaders.Authorization = `Bearer ${options.token}`;
     }
 
-    return $fetch<T>(endpoint, {
+    const response = await $fetch<T>(endpoint, {
       baseURL: config.public.apiUrl,
       params: data,
       method: 'GET',
@@ -64,6 +83,10 @@ export const useHttp = () => {
         }
         throw error;
       });
+
+    setCache(endpoint, response);
+
+    return response;
   };
 
   const httpPost = <T>(url: string, data: any = undefined): Promise<T> => {

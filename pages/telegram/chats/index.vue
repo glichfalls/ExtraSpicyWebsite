@@ -16,7 +16,7 @@ const columns: Column[] = [
 ];
 
 const actions: HydraTableAction[] = [
-  { type: 'view', path: (item: Chat) => `/chats/${item.id}` },
+  { type: 'view', path: (item: Chat) => `/telegram/chats/${item.id}` },
 ]
 
 </script>

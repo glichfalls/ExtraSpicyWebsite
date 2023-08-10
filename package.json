@@ -40,6 +40,7 @@
     "dayjs": "^1.11.9",
     "flowbite": "^1.7.0",
     "flowbite-vue": "^0.0.16",
+    "js-md5": "^0.7.3",
     "pinia": "^2.1.4",
     "sass": "^1.64.0",
     "tsparticles": "^2.11.0",
