@@ -4,8 +4,8 @@ import { HydraEntity } from '~/contract/entity';
 export interface User extends HydraEntity {
   id: string;
   name: string;
-  firstName: string;
-  lastName: string;
+  firstName: string|null;
+  lastName: string|null;
   roles: string[];
 };
 

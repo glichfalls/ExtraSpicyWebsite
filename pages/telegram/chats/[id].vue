@@ -11,16 +11,21 @@
       </span>
     </div>
 
-    <div class="flex mt-3 gap-4">
-      <message-viewer :chatId="id" live class="w-1/2" />
-      <div class="w-1/2">
+    <div class="flex sm:flex-col-reverse lg:flex-row mt-3 gap-4">
+      <div class="w-full md:w-50">
+        <message-viewer v-if="chat" :chatId="chat.id" live />
+      </div>
+      <div class="w-full md:w-25">
         <h2>Member List</h2>
-        <ul>
-          <li v-for="user in chat?.users" :key="user.id">
-            <span>{{ user.firstName }}</span>
-            <span v-if="user.name">({{ user.name }})</span>
-          </li>
-        </ul>
+        <v-list item-props lines="two">
+          <v-list-item
+              v-if="chat?.users"
+              v-for="user in chat.users"
+              :key="user.id"
+              :title="user.firstName || user.name"
+              :subtitle="user.name"
+          />
+        </v-list>
       </div>
     </div>
 
@@ -30,15 +35,21 @@
 <script setup lang="ts">
 
 import { Chat } from '~/contract/entity';
-import { HydraResponse } from '~/contract/api';
+import { HydraResponseSingle } from '~/contract/api';
 import MessageViewer from '~/components/entity/message/MessageViewer.vue';
 
 const route = useRoute();
 const { httpAuthGet } = useHttp();
 
-const id = route.params.id;
+const chat = ref<Chat|null>(null);
 
-const { data: chat, refresh } = useApiFetch<Chat>(`/api/chats/${id}`);
+const loadChat = async () => {
+  chat.value = await httpAuthGet<HydraResponseSingle<Chat>>(`/api/chats/${route.params.id}`);
+}
+
+onMounted(() => {
+  loadChat();
+});
 
 </script>
 

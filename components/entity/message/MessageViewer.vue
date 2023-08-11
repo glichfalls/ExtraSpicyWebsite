@@ -4,13 +4,17 @@
       <div v-if="loading" class="loader">
         <icon v-if="loading" name="svg-spinners:90-ring" />
       </div>
-      <div v-for="message in reversedMessages" :key="message.id" class="message">
+      <div v-for="message in reversedMessages" :key="message.id" class="message" :class="{ 'highlight': message.user.id == user?.id }">
         <span class="user">{{ userDisplayName(message.user) }}</span>
         <span class="text">{{ message.message }}</span>
-        <span class="timestamp">{{ formatDate(message.createdAt) }}</span>
-      </div>
-      <div v-if="loading" class="loader absolute bottom-full">
-        <icon v-if="loading" name="svg-spinners:90-ring" />
+        <span class="timestamp">
+          <span class="text-[8px]">
+            {{ formatChatDate(message.createdAt) }}
+          </span>
+          <span class="text-gray-200">
+            {{ formatDate(message.createdAt) }}
+          </span>
+        </span>
       </div>
     </div>
   </div>
@@ -20,7 +24,7 @@
 import { format } from 'date-fns';
 import { HydraResponse } from '~/contract/api';
 import { Message } from '~/contract/entity';
-import { User } from '~/store/auth';
+import { useAuth, User } from '~/store/auth';
 
 const props = defineProps({
   chatId: {
@@ -33,6 +37,7 @@ const props = defineProps({
   },
 });
 
+const { user } = useAuth();
 const { httpAuthGet } = useHttp();
 
 const chat = ref();
@@ -80,11 +85,24 @@ const loadMore = async () => {
     loading.value = true;
     const params: any = {
       page: page.value + 1,
+      'order[createdAt]': 'desc',
     };
-    const response = await httpAuthGet<HydraResponse<Message>>(url.value, params);
-    messages.value = [...messages.value, ...response['hydra:member']];
+    const response = await httpAuthGet<HydraResponse<Message>>(url.value, params, { cache: false });
     total.value = response['hydra:totalItems'];
     page.value = page.value + 1;
+
+    // Calculate the scroll position before adding new messages
+    const prevScrollTop = chat.value.scrollTop;
+
+    messages.value = [...messages.value, ...response['hydra:member']];
+
+    // Wait for the next render to calculate new scroll position
+    await nextTick();
+
+    // Calculate the scroll position difference after adding new messages
+    const scrollTopDiff = chat.value.scrollTop - prevScrollTop;
+
+    chat.value.scrollTop = chat.value.scrollHeight - scrollTopDiff;
   } catch(error) {
     console.error(error);
   } finally {
@@ -95,11 +113,13 @@ const loadMore = async () => {
 const loadNew = async () => {
   try {
     loading.value = true;
-    const params: any = {};
+    const params: any = {
+      'order[createdAt]': 'asc',
+    };
     if (latestMessageDate.value) {
       params['createdAt[strictly_after]'] = latestMessageDate.value;
     }
-    const response = await httpAuthGet<HydraResponse<Message>>(url.value, params);
+    const response = await httpAuthGet<HydraResponse<Message>>(url.value, params, { cache: false });
     messages.value = [...messages.value, ...response['hydra:member']];
   } catch(error) {
     console.error(error);
@@ -109,11 +129,9 @@ const loadNew = async () => {
 }
 
 const handleScroll = async () => {
-  if (chat.value) {
-    if (chat.value.scrollTop < 600 && messages.value.length < total.value && !loading.value) {
-      prevScrollHeight.value = chat.value.scrollHeight;
+  if (chat.value && !loading.value) {
+    if (chat.value.scrollTop < 600 && messages.value.length < total.value) {
       await loadMore();
-      chat.value.scrollTop = chat.value.scrollHeight - prevScrollHeight.value;
     }
   }
 }
@@ -123,7 +141,7 @@ onMounted(async () => {
   scrollToBottom();
   if (props.live) {
     liveReloadInterval.value = setInterval(async () => {
-      await loadNew();
+      //await loadNew();
     }, 3000);
   } else {
     if (liveReloadInterval.value) {
@@ -148,22 +166,25 @@ const scrollToBottom = (): void => {
 
 <style scoped lang="postcss">
 .message-viewer {
+  @apply flex;
   @apply w-full;
   @apply bg-gray-950 text-white;
   @apply p-4;
   @apply border border-gray-900 rounded-lg;
-  @apply max-h-[600px];
+  @apply h-full max-h-[600px];
   @apply overflow-hidden;
 }
 .message-viewer-wrapper {
+  @apply relative;
   @apply flex flex-col items-start gap-4;
-  @apply w-full h-full;
-  @apply overflow-y-auto;
+  @apply w-full;
+  @apply overflow-y-scroll;
 }
 .loader {
+  @apply sticky top-1 right-1;
   @apply w-full;
-  @apply text-center;
-  @apply py-1;
+  @apply text-right;
+  @apply py-1 px-2;
 }
 .message {
   @apply relative;
@@ -171,8 +192,13 @@ const scrollToBottom = (): void => {
   @apply flex-grow-0;
   @apply pr-16 pl-4;
   @apply py-2;
-  @apply rounded-lg;
+  @apply rounded-md;
+  @apply font-light;
   @apply w-auto max-w-[600px];
+
+  &.highlight {
+    @apply bg-primary-dark;
+  }
 
   .user {
     @apply font-bold;
@@ -186,7 +212,8 @@ const scrollToBottom = (): void => {
   .timestamp {
     @apply w-10;
     @apply absolute right-2 bottom-2;
-    @apply text-xs;
+    @apply text-xs leading-tight;
+    @apply flex flex-col items-end;
   }
 }
 </style>

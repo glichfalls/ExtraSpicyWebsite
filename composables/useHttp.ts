@@ -9,6 +9,7 @@ interface HttpFetchOptions {
     normalizer?: (entity: any) => any;
     contentType?: string;
     accept?: string;
+    cache?: boolean;
 }
 
 export const useHttp = () => {
@@ -29,6 +30,11 @@ export const useHttp = () => {
   const setCache = (endpoint: string, data: any) => {
     window.sessionStorage.setItem(endpoint, JSON.stringify(data));
   }
+
+  setTimeout(() => {
+    console.log('clearing cache');
+    window.sessionStorage.clear();
+  }, 10_000);
 
   const handle401 = () => {
     throw showError({
@@ -59,9 +65,9 @@ export const useHttp = () => {
     return response;
   }
 
-  const httpAuthGet = async <T>(endpoint: string, data: any = undefined, options: HttpFetchOptions = {}): Promise<T> => {
+  const httpAuthGet = async <T>(endpoint: string, data: any = undefined, options: HttpFetchOptions = { cache: true }): Promise<T> => {
     const authGetHeaders: any = headers.value;
-    if (hasCache(endpoint)) {
+    if (hasCache(endpoint) && options.cache) {
       return getCache(endpoint);
     }
     if (auth.token) {
@@ -84,7 +90,9 @@ export const useHttp = () => {
         throw error;
       });
 
-    setCache(endpoint, response);
+    if (options.cache) {
+      setCache(endpoint, response);
+    }
 
     return response;
   };

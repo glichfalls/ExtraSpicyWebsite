@@ -1,7 +1,7 @@
 <template>
   <v-card>
-    <v-layout>
-      <template class="h-[100vh]" v-if="isLoggedIn">
+    <v-layout class="!min-h-[calc(100vh-40px)]">
+      <template v-if="isLoggedIn">
         <v-navigation-drawer theme="dark" rail permanent>
           <v-list density="comfortable" nav>
             <v-list-item
@@ -37,7 +37,6 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import { useAuth } from '~/store/auth';
-import md5 from 'js-md5';
 
 const router = useRouter();
 const route = useRoute();
@@ -53,21 +52,13 @@ type MenuItem = {
 
 const active = ref<MenuItem|null>(null);
 
-const gravatarUrl = computed(() => {
-  if (!user) {
-    return null;
-  }
-  const md5hash = md5(user.name);
-  return `https://www.gravatar.com/avatar/${md5hash}?s=128&d=mp`;
-});
-
 const navigate = async (item: MenuItem) => {
   await router.push(item?.href || item.children?.[0]?.href || '/');
   active.value = item;
 }
 
-const isActive = (item: MenuItem) => {
-  return item?.key && route.fullPath.startsWith(`/${item?.key}`);
+const isActive = (item: MenuItem): boolean => {
+  return !!item?.key && route.fullPath.startsWith(`/${item?.key}`);
 }
 
 const isChildActive = (item: MenuItem) => {

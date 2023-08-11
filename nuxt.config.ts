@@ -9,9 +9,6 @@ export default defineNuxtConfig({
       }
     }
   },
-  css: [
-    '~/assets/css/main.css',
-  ],
   modules: [
     '@nuxtjs/tailwindcss',
     '@formkit/nuxt',
@@ -35,6 +32,9 @@ export default defineNuxtConfig({
     ],
     'nuxt-icon',
     '@invictus.codes/nuxt-vuetify',
+  ],
+  css: [
+    '~/assets/css/main.css',
   ],
   runtimeConfig: {
     public: {
@@ -65,7 +65,9 @@ export default defineNuxtConfig({
     moduleOptions: {
       treeshaking: true,
       useIconCDN: false,
-      styles: 'sass',
+      styles: {
+        configFile: 'assets/css/vuetify.scss',
+      },
       autoImport: true,
       useVuetifyLabs: true,
     }

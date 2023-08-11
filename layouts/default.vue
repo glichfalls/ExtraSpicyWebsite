@@ -1,6 +1,6 @@
 <template>
-  <div class="min-h-[100vh]">
-    <sidebar class="h-[100vh]" h-full>
+  <div>
+    <sidebar>
       <v-main class="lg:px-0">
         <div class="px-4 py-6">
           <slot />
