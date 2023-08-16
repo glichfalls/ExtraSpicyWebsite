@@ -5,11 +5,9 @@
       <line-chart :options="options" :dataset="dataset" />
     </div>
   </div>
-  <spinner v-else size="12" />
 </template>
 <script setup lang="ts">
 import LineChart from '~/components/chart/LineChart.vue';
-import { Spinner } from 'flowbite-vue';
 
 const { httpAuthGet } = useHttp();
 const route = useRoute();
