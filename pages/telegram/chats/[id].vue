@@ -13,7 +13,7 @@
 
     <div class="flex sm:flex-col-reverse lg:flex-row mt-3 gap-4">
       <div class="w-full md:w-50">
-        <message-viewer v-if="chat" :chatId="chat.id" live />
+        <message-viewer v-if="chat" :chatId="chat.id" />
       </div>
       <div class="w-full md:w-25">
         <h2>Member List</h2>

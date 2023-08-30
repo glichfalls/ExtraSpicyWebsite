@@ -32,6 +32,7 @@ export default defineNuxtConfig({
     ],
     'nuxt-icon',
     '@invictus.codes/nuxt-vuetify',
+    '@vueuse/nuxt',
   ],
   css: [
     '~/assets/css/main.css',
@@ -57,6 +58,8 @@ export default defineNuxtConfig({
             colors: {
               primary: '#3f51b5',
               secondary: '#ff9800',
+              accent: '#607d8b',
+
             },
           }
         }

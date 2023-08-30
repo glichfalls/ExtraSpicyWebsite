@@ -1,6 +1,6 @@
 <template>
   <div class="message-viewer">
-    <div class="message-viewer-wrapper" ref="chat" @scroll="handleScroll">
+    <div class="message-viewer-wrapper" ref="chat" :class="{ 'locked': loading }">
       <div v-if="loading" class="loader">
         <icon v-if="loading" name="svg-spinners:90-ring" />
       </div>
@@ -43,17 +43,27 @@ const { httpAuthGet } = useHttp();
 const chat = ref();
 const loading = ref<boolean>(false);
 const messages = ref<Message[]>([]);
-const page = ref<number>(1);
+const page = ref<number>(0);
 const total = ref<number>(0);
 const prevScrollHeight = ref<number>(0);
 const liveReloadInterval = ref<any>(null);
 
-const formatDate = (date: string): string => format(new Date(date), 'HH:mm');
+const { y, isScrolling, arrivedState } = useScroll(chat);
+const { top } = toRefs(arrivedState);
+
+const formatDate = (date: string): string => format(new Date(date), 'HH:mm:ss');
 const formatChatDate = (date: string): string => format(new Date(date), 'd. MMM');
 
 const reversedMessages = computed(() => messages.value.slice().reverse());
 
 const url = computed(() => `/api/messages?chat.id=${props.chatId}`);
+
+watch(top, () => {
+  console.log('top', top.value);
+  if (!loading.value && top.value) {
+    loadMore();
+  }
+});
 
 const latestMessageDate = computed(() => {
   return messages.value[0]?.createdAt;
@@ -66,43 +76,22 @@ const userDisplayName = (user: User) => {
   return user.firstName;
 }
 
-const load = async () => {
-  try {
-    loading.value = true;
-    const response = await httpAuthGet<HydraResponse<Message>>(url.value);
-    messages.value = response['hydra:member'];
-    total.value = response['hydra:totalItems'];
-    page.value = 1;
-  } catch(error) {
-    console.error(error);
-  } finally {
-    loading.value = false;
-  }
-}
-
 const loadMore = async () => {
   try {
     loading.value = true;
     const params: any = {
       page: page.value + 1,
       'order[createdAt]': 'desc',
+      'itemsPerPage': 10,
     };
+    console.log(`load page more ${page.value + 1}`);
     const response = await httpAuthGet<HydraResponse<Message>>(url.value, params, { cache: false });
     total.value = response['hydra:totalItems'];
     page.value = page.value + 1;
-
-    // Calculate the scroll position before adding new messages
-    const prevScrollTop = chat.value.scrollTop;
-
-    messages.value = [...messages.value, ...response['hydra:member']];
-
-    // Wait for the next render to calculate new scroll position
-    await nextTick();
-
-    // Calculate the scroll position difference after adding new messages
-    const scrollTopDiff = chat.value.scrollTop - prevScrollTop;
-
-    chat.value.scrollTop = chat.value.scrollHeight - scrollTopDiff;
+    console.log(messages.value.map(m => m.createdAt));
+    const data = response['hydra:member'];
+    messages.value = [...data, ...messages.value];
+    console.log(messages.value.map(m => m.createdAt));
   } catch(error) {
     console.error(error);
   } finally {
@@ -128,20 +117,12 @@ const loadNew = async () => {
   }
 }
 
-const handleScroll = async () => {
-  if (chat.value && !loading.value) {
-    if (chat.value.scrollTop < 600 && messages.value.length < total.value) {
-      await loadMore();
-    }
-  }
-}
-
 onMounted(async () => {
-  await load();
+  await loadMore();
   scrollToBottom();
   if (props.live) {
     liveReloadInterval.value = setInterval(async () => {
-      //await loadNew();
+      await loadNew();
     }, 3000);
   } else {
     if (liveReloadInterval.value) {
@@ -158,7 +139,8 @@ onBeforeUnmount(() => {
 
 const scrollToBottom = (): void => {
   if (chat.value) {
-    chat.value.scrollTop = chat.value.scrollHeight;
+    console.log('scroll to bottom', chat.value.scrollHeight);
+    y.value = chat.value.scrollHeight;
   }
 }
 
@@ -169,7 +151,6 @@ const scrollToBottom = (): void => {
   @apply flex;
   @apply w-full;
   @apply bg-gray-950 text-white;
-  @apply p-4;
   @apply border border-gray-900 rounded-lg;
   @apply h-full max-h-[600px];
   @apply overflow-hidden;
@@ -179,6 +160,11 @@ const scrollToBottom = (): void => {
   @apply flex flex-col items-start gap-4;
   @apply w-full;
   @apply overflow-y-scroll;
+  @apply p-4;
+
+  &.locked {
+    @apply overflow-hidden;
+  }
 }
 .loader {
   @apply sticky top-1 right-1;

@@ -19,6 +19,8 @@
     "@nuxtjs/tailwindcss": "^6.8.0",
     "@types/node": "^18.16.19",
     "@typescript-eslint/parser": "^5.62.0",
+    "@vueuse/core": "^10.3.0",
+    "@vueuse/nuxt": "^10.3.0",
     "autoprefixer": "^10.4.14",
     "esbuild": "^0.13.4",
     "eslint": "^8.45.0",
