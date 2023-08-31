@@ -1,0 +1,6 @@
+{
+  "routes": {
+    "stocks": "Stocks",
+    "portfolio": "Portfolio"
+  }
+}

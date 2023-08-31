@@ -4,7 +4,9 @@
       <mega-menu :model="items">
         <template #start>
           <div class="pr-10">
-            <h1>Extra Spicy Spam</h1>
+            <nuxt-link to="/">
+              <h1>Extra Spicy Spam</h1>
+            </nuxt-link>
           </div>
         </template>
       </mega-menu>
@@ -27,7 +29,7 @@ const items: MenuItem[] = [
         {
           label: 'Stocks',
           items: [
-            { label: 'Portfolio', to: '/portfolio' }
+            { label: 'Portfolio', to: '/stocks/portfolio' }
           ]
         },
       ],
@@ -43,7 +45,8 @@ const items: MenuItem[] = [
     ],
   },
   {
-    label: 'Chats',
+    label: 'Logout',
+    to: '/logout',
   }
 ];
 
@@ -55,7 +58,7 @@ const items: MenuItem[] = [
   @apply mx-auto;
   @apply flex flex-col items-center gap-4;
   @apply text-gray-400 font-bold;
-  @apply p-4;
+  @apply pt-4 pb-0;
   @apply lg:rounded-lg;
 }
 .menu {

@@ -1,6 +1,6 @@
 <template>
   <NuxtLayout>
-    <NuxtPage/>
+    <NuxtPage />
     <login-modal v-if="!isLoggedIn" />
   </NuxtLayout>
 </template>
@@ -19,6 +19,9 @@ body {
   @apply bg-gray-900 text-gray-400 text-lg;
   @apply min-h-[100vh];
   @apply overflow-x-hidden max-w-[100vw];
+}
+html,body, #__nuxt, #__layout {
+  @apply h-full;
 }
 h1, h2, h3, h4, h5, h6 {
   @apply text-gray-100 text-xl font-bold block;

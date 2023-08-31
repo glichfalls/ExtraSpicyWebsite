@@ -1,52 +1,66 @@
 <template>
   <div>
-    <h1>Portfolios</h1>
-
-    <div class="flex mb-4">
-      <form-kit type="select" label="Chat" :options="chats" @change="(e) => chatId = e.target.value" />
-    </div>
-
-    <div class="h-[50vh]">
-      <line-chart :data="dataset" :options="options" />
-    </div>
+    <panel header="Chart">
+      <template #icons>
+        <button class="p-panel-header-icon p-link mr-2" @click="toggle">
+          <span class="pi pi-cog" />
+        </button>
+        <overlay-panel ref="menuRef" :dismissable="false">
+          <dropdown
+            v-model="chatId"
+            :options="chats"
+            optionLabel="name"
+            class="w-full md:w-14rem"
+          />
+        </overlay-panel>
+      </template>
+      <div class="h-[50vh]">
+        <div v-if="loading" class="h-full">
+          <Skeleton class="mb-2"></Skeleton>
+          <Skeleton width="10rem" class="mb-2"></Skeleton>
+          <Skeleton width="5rem" class="mb-2"></Skeleton>
+          <Skeleton height="2rem" class="mb-2"></Skeleton>
+          <Skeleton width="10rem" height="4rem"></Skeleton>
+        </div>
+        <chart
+          v-else
+          :data="dataset"
+          :options="options"
+          type="line"
+          class="h-full"
+        />
+      </div>
+    </panel>
   </div>
 </template>
 
 <script setup lang="ts">
-// @ts-ignore eslint-disable-next-line no-unused-vars
-import {
-  CategoryScale,
-  Chart as ChartJS,
-  Legend,
-  LinearScale,
-  LineElement,
-  PointElement,
-  Title,
-  Tooltip
-} from 'chart.js';
-import { Line as LineChart } from 'vue-chartjs';
+import Chart from 'primevue/chart';
 import { Portfolio } from '~/contract/entity';
 import { HydraResponse } from '~/contract/api';
-
-ChartJS.register(
-  Title,
-  Tooltip,
-  Legend,
-  CategoryScale,
-  PointElement,
-  LinearScale,
-  LineElement
-);
+import Dropdown from 'primevue/dropdown';
+import OverlayPanel from 'primevue/overlaypanel';
+import ProgressSpinner from 'primevue/progressspinner';
+import Skeleton from 'primevue/skeleton';
 
 const { httpAuthGet } = useHttp();
 
+const menuRef = ref<any>(null);
 const data = ref<Portfolio[]>([]);
+const loading = ref(true);
 const chatId = ref<string|null>('all');
 
+const toggle = (event: any) => {
+  menuRef.value.toggle(event);
+};
+
 const chats = computed(() => {
-  const all = data.value.map(portfolio => portfolio.chat.name);
-  const nonUnique = all.filter(name => all.filter(n => n === name).length > 1);
-  return ['all', ...new Set(nonUnique)];
+  const all = data.value.map(portfolio => ({
+    name: portfolio.chat.name,
+  }));
+  console.log(all);
+  //const unique = all.filter(item => all.filter(n => n.name === item.name).length > 1);
+  return [{ name: 'all' }, ...all];
 });
 
 const dataset = computed(() => {
@@ -166,10 +180,12 @@ const options = {
 };
 
 const load = async () => {
+  loading.value = true;
   const response = await httpAuthGet<HydraResponse<Portfolio>>('/api/portfolios');
   data.value = response['hydra:member'];
+  //loading.value = false;
 };
 
-await load();
+load();
 
 </script>

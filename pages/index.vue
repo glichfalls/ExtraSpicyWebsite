@@ -19,7 +19,7 @@
 
       <div v-if="!videoLoaded">
         <div class="flex justify-center items-center">
-          <icon name="svg-spinners:270-ring-with-bg" size="40px" />
+          <i class="pi pi-spin pi-spinner"></i>
         </div>
       </div>
 

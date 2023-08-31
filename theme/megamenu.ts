@@ -61,7 +61,7 @@ export default {
       class: ['m-0 list-none', 'py-1 w-48']
     },
     submenuheader: {
-      class: ['m-0 py-3 px-5 text-gray-700 dark:text-white/80 bg-white dark:bg-gray-900 font-semibold rounded-tr-md rounded-tl-md']
+      class: ['m-0 py-3 px-5 text-white/80 bg-gray-900 font-semibold rounded-tr-md rounded-tl-md']
     }
   }
 }

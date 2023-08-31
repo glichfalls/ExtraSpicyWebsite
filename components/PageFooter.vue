@@ -4,9 +4,9 @@
       <div class="container mx-auto h-full">
         <div class="flex justify-end items-center h-full">
         <span class="text-xs text-gray-200">
-          made with ❤️ by
           <a target="_blank" href="https://github.com/glichfalls" class="text-primary-300">
-            Robin Portner
+            <i class="pi pi-github mr-1"></i>
+            GitHub
           </a>
         </span>
         </div>

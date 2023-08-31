@@ -1,13 +1,25 @@
 <template>
   <div class="mt-4">
-    <form-kit v-if="!linkSent" type="form" @submit="submit" submit-label="Request Link">
-      <form-kit type="text" name="name" label="Telegram Username" validation="required" class="mb-4" />
-    </form-kit>
+
+    <form class="flex flex-col justify-start items-start" @submit.prevent="submit">
+      <div class="flex flex-col gap-2">
+        <label for="name">Username</label>
+        <input-text v-model="username" />
+        <small id="username-help">Enter your Telegram username to login.</small>
+      </div>
+      <Button
+          type="submit"
+          label="Submit"
+          v-model:loading="loading"
+          loading-icon="pi pi-spin pi-spinner mr-2"
+          class="mt-4"
+      />
+    </form>
 
     <div v-if="hasHttpError" class="pt-4 mt-4 border-t border-gray-700">
-      <div class="text-sm text-red">
+      <inline-message severity="error">
         Something went wrong. Please try again later.
-      </div>
+      </inline-message>
     </div>
 
     <div v-if="showBotQrCode" class="pt-4 mt-4 border-t border-gray-700">
@@ -19,7 +31,7 @@
             Start a Chat with <telegram-logo /> <a class="text-primary" target="_blank" href="https://t.me/ExtraSpicySpamBot">the bot</a> and send him a message.
           </div>
           <div class="mt-2" v-if="loading">
-            <icon name="svg-spinners:270-ring-with-bg" />
+            <i class="pi pi-spin pi-spinner"></i>
           </div>
         </div>
       </div>
@@ -29,6 +41,9 @@
 
 <script setup lang="ts">
 import vueQr from "vue-qr/src/packages/vue-qr.vue";
+import InputText from 'primevue/inputtext';
+import Button from 'primevue/button';
+import InlineMessage from 'primevue/inlinemessage';
 import TelegramLogo from '~/components/TelegramLogo.vue';
 
 const emit = defineEmits(['submit']);
@@ -40,14 +55,15 @@ const hasHttpError = ref(false);
 const showBotQrCode = ref(false);
 const linkSent = ref(false);
 const interval = ref<any>(null);
+const username = ref<string|null>(null);
 const loading = ref(false);
 
-const submit = async (form: { name: string }) => {
+const submit = async () => {
   interval.value = null;
-  await trySendLink(form.name);
+  await trySendLink();
   if (!linkSent.value && !hasHttpError.value) {
     interval.value = setInterval(async () => {
-      await trySendLink(form.name);
+      await trySendLink();
       if (linkSent.value) {
         clearInterval(interval.value);
         linkSent.value = false;
@@ -58,12 +74,15 @@ const submit = async (form: { name: string }) => {
   }
 };
 
-const trySendLink = async (name: string) => {
+const trySendLink = async () => {
   try {
+    if (!username.value) {
+      return;
+    }
     loading.value = true;
     hasHttpError.value = false;
     const response = await httpPost<{ success: boolean; link: string|null }>('/auth/telegram', {
-      name,
+      name: username.value,
     });
     if (response.success) {
       showBotQrCode.value = false;
@@ -83,6 +102,8 @@ const trySendLink = async (name: string) => {
       showBotQrCode.value = false;
       hasHttpError.value = true;
     }
+  } finally {
+    loading.value = false;
   }
 }
 

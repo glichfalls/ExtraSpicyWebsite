@@ -4,12 +4,6 @@ export default defineNuxtConfig({
       title: 'Extra Spicy Website',
       charset: 'utf-8',
       viewport: 'width=device-width, initial-scale=1',
-      htmlAttrs: {
-        class: 'dark',
-      },
-      bodyAttrs: {
-        class: 'dark',
-      }
     }
   },
   modules: [
@@ -18,6 +12,7 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@pinia-orm/nuxt',
     '@vueuse/nuxt',
+    '@nuxtjs/i18n',
     [
       '@nuxtjs/google-fonts',
       {
@@ -42,20 +37,21 @@ export default defineNuxtConfig({
       'primevue',
     ],
   },
+  postcss: {
+    plugins: {
+      'postcss-import': {},
+      tailwindcss: {},
+      autoprefixer: {},
+    }
+  },
   css: [
-    '~/assets/css/main.scss',
     '~/assets/css/tailwind.css',
+    '~/assets/css/main.scss',
   ],
   runtimeConfig: {
     public: {
       apiUrl: '',
       appUrl: ''
-    }
-  },
-  postcss: {
-    plugins: {
-      tailwindcss: {},
-        autoprefixer: {},
     }
   },
   devtools: {
@@ -66,6 +62,25 @@ export default defineNuxtConfig({
       src: '~/plugins/vue3-particles.ts',
       mode: 'client',
     },
+    {
+      src: '~/plugins/primevue.ts',
+      mode: 'client',
+    }
   ],
+  i18n: {
+    experimental: {
+      jsTsFormatResource: true,
+    },
+    defaultLocale: 'en',
+    langDir: 'lang/',
+    locales: [
+      {
+        code: 'en',
+        iso: 'en-US',
+        file: 'en.json',
+        name: 'English',
+      }
+    ]
+  },
   ssr: false,
 });
