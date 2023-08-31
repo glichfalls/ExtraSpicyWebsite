@@ -1,23 +1,13 @@
 <template>
   <header v-if="isLoggedIn" class="header">
     <div class="container">
-      <h1 >Extra Spicy Spam</h1>
-      <div class="menu" @mouseleave="hoverItem = null">
-        <div v-for="item in navigation" :key="item.name">
-          <nuxt-link :to="item.href" @mouseover="() => open(item)">
-            {{ item.name }}
-          </nuxt-link>
-          <template v-if="item.children">
-            <div v-if="hoverItem?.href === item.href" class="submenu">
-              <template v-for="itemChild in item.children" :key="itemChild.name">
-                <nuxt-link :to="itemChild.href">
-                  {{ itemChild.name }}
-                </nuxt-link>
-              </template>
-            </div>
-          </template>
-        </div>
-      </div>
+      <mega-menu :model="items">
+        <template #start>
+          <div class="pr-10">
+            <h1>Extra Spicy Spam</h1>
+          </div>
+        </template>
+      </mega-menu>
     </div>
   </header>
 </template>
@@ -25,38 +15,37 @@
 <script setup lang="ts">
 import { useAuth } from '~/store/auth';
 import { storeToRefs } from 'pinia';
-
-type MenuItem = {
-  name: string,
-  href: string,
-  children?: MenuItem[],
-}
+import { MenuItem } from 'primevue/menuitem';
 
 const { isLoggedIn } = storeToRefs(useAuth());
-const hoverItem = ref<MenuItem|null>(null);
 
-const navigation: MenuItem[] = [
-  { name: 'Ehre', href: '/honor', children: [
-      { name: 'Bank', href: '/bank' },
-      { name: 'Casino', href: '/casino' },
-      { name: 'Gamble', href: '/gamble' },
+const items: MenuItem[] = [
+  {
+    label: 'Ehre',
+    items: [
+      [
+        {
+          label: 'Stocks',
+          items: [
+            { label: 'Portfolio', to: '/portfolio' }
+          ]
+        },
+      ],
+      [
+        {
+          label: 'Casino',
+          items: [
+            { label: 'Gamble' },
+            { label: 'Roulette' },
+          ]
+        },
+      ],
     ],
   },
-  { name: 'Chats', href: '/chats', children: [
-      { name: 'Users', href: '/users' },
-      { name: 'Messages', href: '/messages' },
-    ]
-  },
-  { name: 'Stocks', href: '/stocks', children: [
-      { name: 'Portfolio', href: '/portfolio' },
-    ]
-  },
-  { name: 'Sign out', href: '/logout' },
+  {
+    label: 'Chats',
+  }
 ];
-
-const open = (item: MenuItem) => {
-  hoverItem.value = item?.children?.length ? item : null;
-}
 
 </script>
 

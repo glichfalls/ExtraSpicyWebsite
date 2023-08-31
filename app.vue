@@ -1,10 +1,8 @@
 <template>
-  <v-app>
-    <NuxtLayout>
-      <NuxtPage/>
-      <login-modal v-if="!isLoggedIn" />
-    </NuxtLayout>
-  </v-app>
+  <NuxtLayout>
+    <NuxtPage/>
+    <login-modal v-if="!isLoggedIn" />
+  </NuxtLayout>
 </template>
 
 <script setup lang="ts">

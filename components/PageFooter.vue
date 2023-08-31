@@ -1,5 +1,5 @@
 <template>
-  <v-footer class="!p-0">
+  <footer class="absolute bottom-0 w-full">
     <div class="w-full h-[40px] bg-gray-950 px-4 md:px-10">
       <div class="container mx-auto h-full">
         <div class="flex justify-end items-center h-full">
@@ -12,7 +12,7 @@
         </div>
       </div>
     </div>
-  </v-footer>
+  </footer>
 </template>
 <script setup lang="ts">
 </script>

@@ -4,6 +4,9 @@ export default defineNuxtConfig({
       title: 'Extra Spicy Website',
       charset: 'utf-8',
       viewport: 'width=device-width, initial-scale=1',
+      htmlAttrs: {
+        class: 'dark',
+      },
       bodyAttrs: {
         class: 'dark',
       }
@@ -13,6 +16,8 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@formkit/nuxt',
     '@pinia/nuxt',
+    '@pinia-orm/nuxt',
+    '@vueuse/nuxt',
     [
       '@nuxtjs/google-fonts',
       {
@@ -30,49 +35,21 @@ export default defineNuxtConfig({
         overwriting: true,
       },
     ],
-    'nuxt-icon',
-    '@invictus.codes/nuxt-vuetify',
-    '@vueuse/nuxt',
   ],
+  build: {
+    transpile: [
+      'vue-qr',
+      'primevue',
+    ],
+  },
   css: [
-    '~/assets/css/main.css',
+    '~/assets/css/main.scss',
+    '~/assets/css/tailwind.css',
   ],
   runtimeConfig: {
     public: {
       apiUrl: '',
       appUrl: ''
-    }
-  },
-  build: {
-    transpile: [
-      'vue-qr',
-    ],
-  },
-  vuetify: {
-    vuetifyOptions: {
-      theme: {
-        defaultTheme: 'custom',
-        themes: {
-          custom: {
-            dark: true,
-            colors: {
-              primary: '#3f51b5',
-              secondary: '#ff9800',
-              accent: '#607d8b',
-
-            },
-          }
-        }
-      }
-    },
-    moduleOptions: {
-      treeshaking: true,
-      useIconCDN: false,
-      styles: {
-        configFile: 'assets/css/vuetify.scss',
-      },
-      autoImport: true,
-      useVuetifyLabs: true,
     }
   },
   postcss: {

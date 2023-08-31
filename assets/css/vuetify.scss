@@ -1,9 +1,0 @@
-@use 'vuetify/settings' with (
-  $utilities: true,
-);
-
-// --v-theme-surface
-.v-theme--custom:root {
-  --v-theme-surface: 19, 19, 19;
-  --v-border-color: 19, 19, 19;
-}

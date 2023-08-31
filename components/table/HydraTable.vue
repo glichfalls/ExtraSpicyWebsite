@@ -1,33 +1,21 @@
 <template>
-  <v-data-table-server
-      v-model:items-per-page="itemsPerPage"
-      :items-length="total"
-      :headers="allColumns"
-      :items="rows"
-      :loading="loading"
-      @update:options="load"
-  >
-    <template v-for="column in columns" #[`item.${String(column.key)}`]="{ item } : { item: { selectable: T } }">
-      <slot :name="column.key" :item="item.selectable" :value="item.selectable[column.key]">
-        <td>
-          {{ item.selectable[column.key] || '-' }}
-        </td>
-      </slot>
+  <data-table :value="rows">
+    <template #header>
+      <div class="flex flex-wrap align-items-center justify-content-between gap-2">
+        <span class="text-xl text-900 font-bold">Products</span>
+        <Button icon="pi pi-refresh" rounded raised />
+      </div>
     </template>
-    <template v-slot:item.actions="{ item }: { item: { selectable: T } }">
-        <template v-for="action in actions">
-          <nuxt-link v-if="action.type == 'view'" class="font-bold hover:text-primary" :to="action.path(item.selectable)">
-            <icon name="heroicons-outline:eye" />
-          </nuxt-link>
-        </template>
-    </template>
-    <template v-slot:bottom>
-      <v-pagination v-if="pageCount > 1" v-model="page" :length="pageCount" />
-    </template>
-  </v-data-table-server>
+    <Column v-for="column in columns" :key="column.key" :field="column.key" :header="column.title">
+      <template #body="slotProps">
+        <slot :name="column.key">
+          Test
+        </slot>
+      </template>
+    </Column>
+  </data-table>
 </template>
 <script setup lang="ts" generic="T extends HydraEntity, K extends keyof T">
-import { VDataTableServer } from 'vuetify/labs/VDataTable';
 import { HydraResponse } from "~/contract/api";
 import { HydraEntity } from '~/contract/entity';
 import { Ref } from 'vue';

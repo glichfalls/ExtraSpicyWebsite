@@ -6,10 +6,13 @@ module.exports = {
     "./plugins/**/*.{js,ts}",
     "./nuxt.config.{js,ts}",
     "./app.vue",
+    "./theme/**/*.{js,ts}",
+    "./node_modules/primevue/**/*.{vue,js,ts,jsx,tsx}",
   ],
   plugins: [
     require('@formkit/themes/tailwindcss'),
   ],
+  darkMode: 'class',
   theme: {
     corePlugins: ['margin'],
     extend: {
