@@ -183,7 +183,7 @@ const load = async () => {
   loading.value = true;
   const response = await httpAuthGet<HydraResponse<Portfolio>>('/api/portfolios');
   data.value = response['hydra:member'];
-  //loading.value = false;
+  loading.value = false;
 };
 
 load();
