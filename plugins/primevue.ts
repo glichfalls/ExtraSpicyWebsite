@@ -10,6 +10,7 @@ import MegaMenuTheme from '~/theme/megamenu';
 import Panel from 'primevue/panel';
 import ProgressSpinner from 'primevue/progressspinner';
 import Skeleton from 'primevue/skeleton';
+import Dialog from 'primevue/dialog';
 
 export default defineNuxtPlugin((nuxtApp: any) => {
 
@@ -81,7 +82,7 @@ export default defineNuxtPlugin((nuxtApp: any) => {
       root: {
         class: [
           'w-full max-w-[600px]',
-          'bg-gray-900',
+          '!bg-gray-900',
         ]
       },
       header: {
@@ -147,4 +148,5 @@ export default defineNuxtPlugin((nuxtApp: any) => {
   nuxtApp.vueApp.component('Panel', Panel);
   nuxtApp.vueApp.component('ProgressSpinner', ProgressSpinner);
   nuxtApp.vueApp.component('Skeleton', Skeleton);
+  nuxtApp.vueApp.component('Dialog', Dialog);
 });

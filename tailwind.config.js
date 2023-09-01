@@ -27,10 +27,6 @@ module.exports = {
             secondary: '#f50057',
             tertiary: '#ff9800',
             success: '#4caf50',
-            gray: {
-              900: '#111827',
-              800: '#141921',
-            }
         }
     },
   }
