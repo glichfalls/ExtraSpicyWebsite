@@ -1,37 +1,39 @@
 <template>
-  <div>
-    <panel header="Chart">
-      <template #icons>
-        <button class="p-panel-header-icon p-link mr-2" @click="toggle">
-          <span class="pi pi-cog" />
-        </button>
-        <overlay-panel ref="menuRef" :dismissable="false">
-          <dropdown
-            v-model="chatId"
-            :options="chats"
-            optionLabel="name"
-            class="w-full md:w-14rem"
+  <card>
+    <template #title>
+      Portfolio
+    </template>
+    <template #content>
+      <panel header="History Chart">
+        <template #icons>
+          <button class="p-panel-header-icon p-link mr-2" @click="toggle">
+            <span class="pi pi-cog" />
+          </button>
+          <overlay-panel ref="menuRef" :dismissable="false">
+            <dropdown
+              v-model="chatId"
+              :options="chats"
+              optionLabel="name"
+              class="w-full md:w-14rem"
+            />
+          </overlay-panel>
+        </template>
+        <div class="h-[50vh]">
+          <div v-if="loading" class="h-full">
+            <Skeleton height="4rem" class="mb-2"></Skeleton>
+            <Skeleton height="16rem" class="mb-2"></Skeleton>
+          </div>
+          <chart
+            v-else
+            :data="dataset"
+            :options="options"
+            type="line"
+            class="h-full"
           />
-        </overlay-panel>
-      </template>
-      <div class="h-[50vh]">
-        <div v-if="loading" class="h-full">
-          <Skeleton class="mb-2"></Skeleton>
-          <Skeleton width="10rem" class="mb-2"></Skeleton>
-          <Skeleton width="5rem" class="mb-2"></Skeleton>
-          <Skeleton height="2rem" class="mb-2"></Skeleton>
-          <Skeleton width="10rem" height="4rem"></Skeleton>
         </div>
-        <chart
-          v-else
-          :data="dataset"
-          :options="options"
-          type="line"
-          class="h-full"
-        />
-      </div>
-    </panel>
-  </div>
+      </panel>
+    </template>
+  </card>
 </template>
 
 <script setup lang="ts">
@@ -40,8 +42,8 @@ import { Portfolio } from '~/contract/entity';
 import { HydraResponse } from '~/contract/api';
 import Dropdown from 'primevue/dropdown';
 import OverlayPanel from 'primevue/overlaypanel';
-import ProgressSpinner from 'primevue/progressspinner';
 import Skeleton from 'primevue/skeleton';
+import Card from 'primevue/card';
 
 const { httpAuthGet } = useHttp();
 
@@ -189,3 +191,14 @@ const load = async () => {
 load();
 
 </script>
+
+<style scoped lang="postcss">
+:deep(.p-panel .p-panel-header) {
+  @apply border-0;
+  @apply px-2;
+}
+:deep(.p-panel .p-panel-content) {
+  @apply border-0;
+  @apply px-2;
+}
+</style>

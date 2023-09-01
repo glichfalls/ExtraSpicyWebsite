@@ -1,22 +1,32 @@
 <template>
-  <div>
-    <h1>Chats</h1>
-    <chat-table url="/api/chats" :columns="columns" :actions="actions" />
-  </div>
+  <card>
+    <template #content>
+      <chat-table url="/api/chats" :columns="columns" :actions="actions" />
+    </template>
+  </card>
 </template>
 
 <script setup lang="ts">
-import HydraTable, { HydraTableAction, Column } from '~/components/table/HydraTable.vue';
+import Card from 'primevue/card';
+import HydraTable from '~/components/table/HydraTable.vue';
 import { Chat } from '~/contract/entity';
+import { MenuItem } from 'primevue/menuitem';
 
 const ChatTable: typeof HydraTable<Chat, keyof Chat> = HydraTable;
 
-const columns: Column[] = [
+const columns: any[] = [
   { title: 'Chat Name', align: 'start', sortable: true, key: 'name' },
 ];
 
-const actions: HydraTableAction[] = [
-  { type: 'view', path: (item: Chat) => `/telegram/chats/${item.id}` },
+const actions: MenuItem[] = [
+  {
+    label: 'Actions',
+    items: [
+      { label: 'View', icon: 'pi pi-eye', command: (event) => {
+          console.log(event);
+        } },
+    ],
+  }
 ]
 
 </script>

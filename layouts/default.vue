@@ -7,7 +7,6 @@
       </slot>
       <slot />
     </main>
-    <page-footer />
   </div>
 </template>
 
@@ -41,5 +40,9 @@ main {
   @apply block;
   @apply container mx-auto;
   @apply px-4 lg:px-0 py-2;
+}
+:deep(.p-breadcrumb) {
+  @apply bg-transparent;
+  @apply border-0;
 }
 </style>

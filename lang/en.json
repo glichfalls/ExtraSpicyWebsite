@@ -1,6 +1,8 @@
 {
   "routes": {
     "stocks": "Stocks",
-    "portfolio": "Portfolio"
+    "portfolio": "Portfolio",
+    "telegram": "Telegram",
+    "chats": "Chats"
   }
 }

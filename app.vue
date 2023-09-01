@@ -16,14 +16,11 @@ const { isLoggedIn } = storeToRefs(useAuth());
 <style lang="postcss">
 body {
   font-family: 'Inter', sans-serif;
-  @apply bg-gray-900 text-gray-400 text-lg;
+  background-color: var(--surface-ground);
   @apply min-h-[100vh];
   @apply overflow-x-hidden max-w-[100vw];
 }
 html,body, #__nuxt, #__layout {
   @apply h-full;
-}
-h1, h2, h3, h4, h5, h6 {
-  @apply text-gray-100 text-xl font-bold block;
 }
 </style>

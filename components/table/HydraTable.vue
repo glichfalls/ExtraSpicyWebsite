@@ -1,37 +1,29 @@
 <template>
-  <data-table :value="rows">
-    <template #header>
-      <div class="flex flex-wrap align-items-center justify-content-between gap-2">
-        <span class="text-xl text-900 font-bold">Products</span>
-        <Button icon="pi pi-refresh" rounded raised />
-      </div>
-    </template>
-    <Column v-for="column in columns" :key="column.key" :field="column.key" :header="column.title">
-      <template #body="slotProps">
+  <data-table :value="rows" :loading="loading" stripedRows>
+    <column v-for="column in columns" :key="column.key" :field="column.key" :header="column.title">
+      <template #body="{ data }">
         <slot :name="column.key">
-          Test
+          {{ data[column.key] }}
         </slot>
       </template>
-    </Column>
+    </column>
+    <column v-if="actions?.length" key="actions" body-class="!text-right">
+      <template #body="{ data }">
+        <context-button :data="data" :items="actions" />
+      </template>
+    </column>
   </data-table>
 </template>
+
 <script setup lang="ts" generic="T extends HydraEntity, K extends keyof T">
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
 import { HydraResponse } from "~/contract/api";
 import { HydraEntity } from '~/contract/entity';
 import { Ref } from 'vue';
+import ContextButton from '~/components/button/ContextButton.vue';
 
 const { httpAuthGet } = useHttp();
-
-export type ViewAction = {
-  type: 'view',
-  path: (item: T) => string,
-}
-
-export type DeleteAction = {
-  type: 'delete',
-}
-
-export type HydraTableAction = ViewAction|DeleteAction;
 
 export type Column = {
   title: string,
@@ -44,7 +36,7 @@ const props = defineProps<{
   data?: T[],
   url?: string,
   columns: Column[],
-  actions?: HydraTableAction[],
+  actions?: any[],
 }>();
 
 const page = ref(1);
@@ -118,6 +110,8 @@ const load = async ({
     }
   }
 }
+
+load();
 
 </script>
 

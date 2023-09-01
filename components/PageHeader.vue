@@ -24,6 +24,7 @@ const { isLoggedIn } = storeToRefs(useAuth());
 const items: MenuItem[] = [
   {
     label: 'Ehre',
+    icon: 'pi pi-fw pi-money-bill',
     items: [
       [
         {
@@ -45,7 +46,30 @@ const items: MenuItem[] = [
     ],
   },
   {
+    label: 'Telegram',
+    icon: 'pi pi-fw pi-send',
+    items: [
+      [
+        {
+          label: 'Chats',
+          items: [
+            { label: 'Chats', to: '/telegram/chats' },
+          ]
+        },
+      ],
+      [
+          {
+            label: 'Admin',
+            items: [
+              { label: 'Users', to: '' }
+            ]
+          },
+      ],
+    ],
+  },
+  {
     label: 'Logout',
+    icon: 'pi pi-fw pi-sign-out',
     to: '/logout',
   }
 ];
@@ -61,24 +85,8 @@ const items: MenuItem[] = [
   @apply pt-4 pb-0;
   @apply lg:rounded-lg;
 }
-.menu {
-  @apply flex justify-start gap-4 mt-4;
-  @apply relative;
-
-  &:hover .submenu {
-    @apply flex flex-col;
-  }
-
-  a {
-    @apply text-white;
-    @apply text-sm font-semibold;
-  }
-}
-.submenu {
-  @apply absolute top-full left-0;
-  @apply bg-gray-800;
-  @apply rounded-lg;
-  @apply px-4 py-2 mt-1;
-  @apply flex
+:deep(.p-megamenu) {
+  @apply bg-transparent;
+  @apply border-0;
 }
 </style>
