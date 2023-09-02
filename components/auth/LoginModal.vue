@@ -1,6 +1,6 @@
 <template>
   <Dialog v-model:visible="isOpen" modal header="Authentication" :closable="false">
-    <div class="bg-gray-900">
+    <div>
       <span class="text-lg font-bold text-white block mb-2">
         <span v-if="submitted">Telegram Login Link sent</span>
         <span v-else>Telegram Login Required</span>
