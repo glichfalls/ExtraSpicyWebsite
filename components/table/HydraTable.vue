@@ -1,27 +1,32 @@
 <template>
-  <data-table :value="rows" :loading="loading" stripedRows>
-    <column v-for="column in columns" :key="column.key" :field="column.key" :header="column.title">
-      <template #body="{ data }">
-        <slot :name="column.key">
-          {{ data[column.key] }}
-        </slot>
-      </template>
-    </column>
-    <column v-if="actions?.length" key="actions" body-class="!text-right">
-      <template #body="{ data }">
-        <context-button :data="data" :items="actions" />
-      </template>
-    </column>
-  </data-table>
+  <div>
+    <context-menu ref="contextMenuRef" :model="contextMenuModel" />
+    <data-table
+      v-model:context-menu-selection="contextMenuSelection"
+      :value="rows"
+      :loading="loading"
+      striped-rows
+      context-menu
+      @rowContextmenu="onRowContextMenu"
+    >
+      <column v-for="column in columns" :key="column.key" :field="column.key" :header="column.title">
+        <template #body="{ data }">
+          <slot :name="column.key">
+            {{ data[column.key] }}
+          </slot>
+        </template>
+      </column>
+    </data-table>
+  </div>
 </template>
 
 <script setup lang="ts" generic="T extends HydraEntity, K extends keyof T">
 import DataTable from 'primevue/datatable';
+import ContextMenu from 'primevue/contextmenu';
 import Column from 'primevue/column';
 import { HydraResponse } from "~/contract/api";
 import { HydraEntity } from '~/contract/entity';
 import { Ref } from 'vue';
-import ContextButton from '~/components/button/ContextButton.vue';
 
 const { httpAuthGet } = useHttp();
 
@@ -32,37 +37,47 @@ export type Column = {
   align?: 'start' | 'center' | 'end',
 }
 
+type Action = {
+  label: string;
+  icon?: string;
+  name: string;
+}
+
 const props = defineProps<{
   data?: T[],
   url?: string,
   columns: Column[],
-  actions?: any[],
+  actions?: Action[],
 }>();
+
+const emit = defineEmits();
 
 const page = ref(1);
 const itemsPerPage = ref(30);
 const total = ref(0);
 const loading = ref(false);
+const contextMenuRef = ref();
+const contextMenuSelection = ref();
 const filter = reactive<any>({
   search: {},
 });
-
 // https://github.com/vuejs/core/issues/2136#issuecomment-908269949
 const rows = ref<T[]>(props.data || []) as Ref<T[]>;
 
 watch(page, () => load({ page: page.value }));
 watch(filter, () => debouncedLoading(), { deep: true });
 
-const pageCount = computed(() => Math.ceil(total.value / itemsPerPage.value));
+const contextMenuModel = computed(() => props.actions?.map((action) => ({
+  label: action.label,
+  icon: action.icon,
+  command: () => emit(action.name, contextMenuSelection.value),
+})));
 
-const allColumns = computed(() => {
-  return [...props.columns, {
-    title: 'Actions',
-    key: 'actions',
-    sortable: false,
-    align: 'end',
-  }];
-});
+const onRowContextMenu = (event: any) => {
+  contextMenuRef.value.show(event.originalEvent);
+};
+
+const pageCount = computed(() => Math.ceil(total.value / itemsPerPage.value));
 
 const filterQuery = computed(() => {
   const query: any = {};

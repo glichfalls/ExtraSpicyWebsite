@@ -8,6 +8,7 @@ import Panel from 'primevue/panel';
 import ProgressSpinner from 'primevue/progressspinner';
 import Skeleton from 'primevue/skeleton';
 import Dialog from 'primevue/dialog';
+import ContextMenu from 'primevue/contextmenu';
 import 'primevue/resources/themes/lara-dark-blue/theme.css';
 
 export default defineNuxtPlugin((nuxtApp: any) => {
@@ -21,4 +22,5 @@ export default defineNuxtPlugin((nuxtApp: any) => {
   nuxtApp.vueApp.component('ProgressSpinner', ProgressSpinner);
   nuxtApp.vueApp.component('Skeleton', Skeleton);
   nuxtApp.vueApp.component('Dialog', Dialog);
+  nuxtApp.vueApp.component('ContextMenu', ContextMenu);
 });
