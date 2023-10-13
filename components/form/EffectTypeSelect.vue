@@ -16,6 +16,8 @@ import Dropdown from 'primevue/dropdown';
 
 const emit = defineEmits(['update:modelValue']);
 
+const { httpAuthGet } = useHttp();
+
 const props = defineProps<{
   modelValue: string;
   label: string;
@@ -24,17 +26,23 @@ const props = defineProps<{
 const effects = ref<{
   name: string,
   code: string
-}[]>([
-  { name: 'Luck', code: 'LUCK' },
-  { name: 'Gamble Luck', code: 'GAMBLE_LUCK' },
-]);
+}[]>([]);
 
 const value = ref<{
   name: string;
   code: string;
 }>({
-  name: effects.value.find((effect) => effect.code === props.modelValue)?.name || '',
-  code: props.modelValue,
+  name: '',
+  code: '',
+});
+
+onBeforeMount(async () => {
+  const types = await httpAuthGet<{[key: string]: string}>('/nft/effect-types');
+  effects.value = Object.entries(types).map(([code, name]) => ({ code, name }));
+  value.value = {
+    name: effects.value.find((effect) => effect.code === props.modelValue)?.name || '',
+    code: props.modelValue,
+  }
 });
 
 watch(value, (newValue) => {

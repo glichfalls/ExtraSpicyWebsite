@@ -13,7 +13,7 @@
       <effect-type-select v-model="formData.type" label="Type" class="w-1/3" />
       <operator-select v-model="formData.operator" label="Operator" />
       <span class="p-float-label mt-6 w-full">
-        <prime-number v-model="formData.magnitude" inputId="magnitude" class="w-full" />
+        <prime-number v-model="formData.magnitude" :min-fraction-digits="2" :max-fraction-digits="3" inputId="magnitude" class="w-full" />
         <label for="magnitude">Magnitude</label>
       </span>
     </div>

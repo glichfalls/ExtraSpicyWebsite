@@ -18,7 +18,7 @@ const props = defineProps<{
 
 const value = ref<string>(props.modelValue);
 
-const operators = ['+', '-', '*', '/'];
+const operators = ['+', '-', '*', '/', '='];
 
 watch(value, (newValue) => {
   emit('update:modelValue', newValue);

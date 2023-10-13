@@ -26,6 +26,7 @@
         label="Select Owner(s)"
     />
     <effect-select
+        v-if="input !== null"
         v-model="formData.effects"
         label="Select Effects"
     />
