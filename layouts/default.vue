@@ -27,7 +27,7 @@ const home = ref({
 
 const items = computed<MenuItem[]>(() => {
   const routes = String(route.path).split('/').filter((route) => !!route);
-  return routes?.map((route, index) => ({
+  return routes?.slice(0, -1).map((route, index) => ({
     label: t(`routes.${route}`),
     to: `/${routes.slice(0, index + 1).join('/')}`,
   })) ?? [];

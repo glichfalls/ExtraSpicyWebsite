@@ -1,8 +1,11 @@
 {
   "routes": {
+    "collectable": "NFT",
+    "instance": "Instances",
     "stocks": "Stocks",
     "portfolio": "Portfolio",
     "telegram": "Telegram",
-    "chats": "Chats"
+    "chats": "Chats",
+    "create": "create"
   }
 }

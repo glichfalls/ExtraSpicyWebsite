@@ -5,7 +5,7 @@
         <template #start>
           <div class="pr-10">
             <nuxt-link to="/">
-              <h1>Extra Spicy Spam</h1>
+              <img src="/branding/logo-sm.png" alt="Extra Spicy Spam" class="w-24" />
             </nuxt-link>
           </div>
         </template>
@@ -22,6 +22,21 @@ import { MenuItem } from 'primevue/menuitem';
 const { isLoggedIn } = storeToRefs(useAuth());
 
 const items: MenuItem[] = [
+  {
+    label: 'NFT',
+    icon: 'pi pi-fw pi-money-bill',
+    items: [
+      [
+        {
+          label: 'NFT Management',
+          items: [
+            { label: 'create NFT', to: '/collectable/create' },
+            { label: 'create Instance', to: '/collectable/instance/create' },
+          ]
+        },
+      ]
+    ]
+  },
   {
     label: 'Ehre',
     icon: 'pi pi-fw pi-money-bill',

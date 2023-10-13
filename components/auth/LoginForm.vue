@@ -1,10 +1,10 @@
 <template>
   <div class="mt-4">
 
-    <form class="flex flex-col justify-start items-start" @submit.prevent="submit">
-      <div class="flex flex-col gap-2">
+    <form class="flex flex-col justify-start items-start w-full" @submit.prevent="submit">
+      <div class="w-full flex flex-col gap-2">
         <label for="name">Username</label>
-        <input-text v-model="username" />
+        <input-text v-model="username" placeholder="Telegram username" />
         <small id="username-help">Enter your Telegram username to login.</small>
       </div>
       <Button
