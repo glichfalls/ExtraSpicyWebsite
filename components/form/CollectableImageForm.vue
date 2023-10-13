@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col items-start gap-2 w-full">
     <h3 class="text-lg font-bold">NFT Image</h3>
-    <img v-if="imageUrl" :src="imageUrl" class="h-80 my-3" />
+    <img v-if="imageUrl" :src="imageUrl" class="h-80 my-3" @error="imageSrcError = true;" />
     <prime-file-upload
         v-else
         :multiple="false"
@@ -32,8 +32,9 @@ const props = defineProps({
   },
 });
 
+const imageSrcError = ref(false);
 const imageUrl = computed(() => {
-  if (props.input?.imagePublicPath) {
+  if (props.input?.imagePublicPath && !imageSrcError.value) {
     return `${config.public.apiUrl}/${props.input.imagePublicPath}`;
   }
   return null;
