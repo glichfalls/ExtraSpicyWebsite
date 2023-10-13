@@ -11,7 +11,7 @@
     >
       <column v-for="column in columns" :key="column.key" :field="column.key" :header="column.title">
         <template #body="{ data }">
-          <slot :name="column.key">
+          <slot :name="column.key" :data="data[column.key]">
             {{ data[column.key] }}
           </slot>
         </template>

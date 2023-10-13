@@ -30,8 +30,8 @@ const items: MenuItem[] = [
         {
           label: 'NFT Management',
           items: [
-            { label: 'create NFT', to: '/collectable/create' },
-            { label: 'create Instance', to: '/collectable/instance/create' },
+            { label: 'List', to: '/collectable' },
+            { label: 'Create', to: '/collectable/create' },
           ]
         },
       ]
@@ -48,37 +48,6 @@ const items: MenuItem[] = [
             { label: 'Portfolio', to: '/stocks/portfolio' }
           ]
         },
-      ],
-      [
-        {
-          label: 'Casino',
-          items: [
-            { label: 'Gamble' },
-            { label: 'Roulette' },
-          ]
-        },
-      ],
-    ],
-  },
-  {
-    label: 'Telegram',
-    icon: 'pi pi-fw pi-send',
-    items: [
-      [
-        {
-          label: 'Chats',
-          items: [
-            { label: 'Chats', to: '/telegram/chats' },
-          ]
-        },
-      ],
-      [
-          {
-            label: 'Admin',
-            items: [
-              { label: 'Users', to: '' }
-            ]
-          },
       ],
     ],
   },

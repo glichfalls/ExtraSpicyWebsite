@@ -69,3 +69,21 @@ export interface Sticker extends HydraEntity {
     }
 }
 
+export interface Collectable extends HydraEntity {
+    id: string;
+    name: string;
+    description: string;
+    imagePublicPath: string|null;
+    tradeable: boolean;
+    isUnique: boolean;
+}
+
+export interface CollectableInstance extends HydraEntity {
+    id: string;
+    collectable: Collectable;
+    user: User;
+    price: number;
+    createdAt: Date;
+    updatedAt: Date;
+}
+

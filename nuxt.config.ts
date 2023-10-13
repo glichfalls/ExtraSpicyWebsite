@@ -13,7 +13,6 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@formkit/nuxt',
     '@pinia/nuxt',
-    '@pinia-orm/nuxt',
     '@vueuse/nuxt',
     '@nuxtjs/i18n',
     [

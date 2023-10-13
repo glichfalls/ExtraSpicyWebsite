@@ -33,7 +33,6 @@
     "@formkit/nuxt": "^0.17.4",
     "@formkit/themes": "^0.17.4",
     "@nuxtjs/google-fonts": "^3.0.2",
-    "@pinia-orm/nuxt": "^1.6.7",
     "@pinia/nuxt": "^0.4.11",
     "chart.js": "^4.3.0",
     "date-fns": "^2.30.0",

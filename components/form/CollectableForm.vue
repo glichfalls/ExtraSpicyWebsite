@@ -35,7 +35,7 @@
         <label for="unique">Unique</label>
       </div>
     </div>
-    <prime-button type="submit" label="Save" class="mt-4" @click.prevent="submit" />
+    <prime-button type="submit" label="Save" class="mt-4" :loading="loading" @click.prevent="submit" />
   </div>
 </template>
 
@@ -61,6 +61,8 @@ const props = defineProps({
     default: null,
   },
 });
+
+const loading = ref(false);
 
 const formData: {
   name: string;
@@ -99,27 +101,30 @@ const submit = () => {
 
 const saveEdit = async () => {
   try {
-    const response = await httpPut<string[]>(`/nft/${props.input.id}`, {
+    loading.value = true;
+    await httpPut<string[]>(`/nft/${props.input.id}`, {
       ...formData,
       chat: undefined,
       users: undefined,
     });
-    if (response) {
-      return router.push(`/collectable/${response[0]}`);
-    }
   } catch (err) {
     toast.add({ severity: 'error', summary: 'Error', detail: err.message, life: 3000 });
+  } finally {
+    loading.value = false;
   }
 };
 
 const saveCreate = async () => {
   try {
+    loading.value = true;
     const response = await httpPost<string[]>('/nft', formData);
     if (response) {
       return router.push(`/collectable/${response[0]}`);
     }
   } catch (err) {
     toast.add({ severity: 'error', summary: 'Error', detail: err.message, life: 3000 });
+  } finally {
+    loading.value = false;
   }
 };
 
