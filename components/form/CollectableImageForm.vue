@@ -47,6 +47,9 @@ const uploader = async (event: FileUploadUploaderEvent) => {
     data.append('image', event.files[0]);
     const response = await httpPost<string>(`/nft/${props.input.id}/upload`, data);
     emit('upload:success', response);
+    if (imageSrcError.value) {
+      imageSrcError.value = false;
+    }
   } catch (err) {
     console.log(err);
   }
