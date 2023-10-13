@@ -87,3 +87,11 @@ export interface CollectableInstance extends HydraEntity {
     updatedAt: Date;
 }
 
+export interface Effect extends HydraEntity {
+    id: string;
+    name: string;
+    description: string;
+    type: string;
+    operator: string;
+    magnitude: number;
+}

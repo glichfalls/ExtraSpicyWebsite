@@ -10,6 +10,13 @@
         <template #imagePublicPath="{ data }">
           <img v-if="data" :src="path(data)" alt="" class="h-12" />
         </template>
+        <template #id="{ data }">
+          <div class="flex justify-end">
+            <prime-button severity="primary" rounded  size="small" @click="router.push(`/collectable/${data}`)">
+              View
+            </prime-button>
+          </div>
+        </template>
       </collectable-table>
     </template>
   </card>
@@ -17,6 +24,7 @@
 <script setup lang="ts">
 import Card from 'primevue/card';
 import HydraTable from '~/components/table/HydraTable.vue';
+import PrimeButton from 'primevue/button';
 import { Collectable } from '~/contract/entity';
 
 const router = useRouter();
@@ -30,6 +38,7 @@ const columns: any[] = [
   { title: 'Image', align: 'start', sortable: true, key: 'imagePublicPath' },
   { title: 'Name', align: 'start', sortable: true, key: 'name' },
   { title: 'Description', align: 'start', sortable: true, key: 'description' },
+  { title: '', align: 'end', sortable: false, key: 'id' },
 ];
 
 const actions = [

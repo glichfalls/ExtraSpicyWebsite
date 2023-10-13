@@ -25,6 +25,10 @@
         :chat-id="formData.chat[0]['@id']"
         label="Select Owner(s)"
     />
+    <effect-select
+        v-model="formData.effects"
+        label="Select Effects"
+    />
     <div class="flex gap-10 my-3">
       <div class="flex items-center gap-3">
         <prime-checkbox v-model="formData.tradable" inputId="tradable" :binary="true" />
@@ -48,8 +52,10 @@ import UserSelect from '~/components/form/UserSelect.vue';
 import PrimeTextarea from 'primevue/textarea';
 import PrimeInput from 'primevue/inputtext';
 import { User } from '~/store/auth';
-import { Chat } from '~/contract/entity';
+import { Chat, Effect } from '~/contract/entity';
 import { useToast } from 'primevue/usetoast';
+import InlineMessage from 'primevue/inlinemessage';
+import EffectSelect from '~/components/form/EffectSelect.vue';
 
 const { httpPost, httpPut } = useHttp();
 const toast = useToast();
@@ -70,6 +76,7 @@ const formData: {
   price: number;
   tradable: boolean;
   unique: boolean;
+  effects: Effect[];
   users: User[];
   chat: Chat[];
 } = reactive({
@@ -78,6 +85,7 @@ const formData: {
   price: 0,
   tradable: false,
   unique: false,
+  effects: [],
   chat: [],
   users: [],
 });
@@ -88,6 +96,7 @@ if (props.input) {
   formData.price = props.input.price;
   formData.tradable = props.input.tradeable;
   formData.unique = props.input.unique;
+  formData.effects = props.input.effects;
   formData.chat = [];
   formData.users = [];
 }
@@ -107,6 +116,7 @@ const saveEdit = async () => {
       chat: undefined,
       users: undefined,
     });
+    toast.add({ severity: 'success', summary: 'Success Message', detail: 'Message Content', life: 3000, group: 'tr' });
   } catch (err) {
     toast.add({ severity: 'error', summary: 'Error', detail: err.message, life: 3000 });
   } finally {

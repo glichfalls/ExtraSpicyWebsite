@@ -1,0 +1,4 @@
+.p-inline-message {
+    @apply p-2;
+    @apply border-0;
+}

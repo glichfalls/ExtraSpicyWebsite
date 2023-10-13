@@ -1,10 +1,8 @@
 <template>
   <div class="h-full">
     <page-header />
+    <prime-toast />
     <main>
-      <slot v-if="isLoggedIn" name="breadcrumb">
-        <breadcrumb :home="home" :model="items" class="mb-4" />
-      </slot>
       <slot />
     </main>
   </div>
@@ -12,6 +10,7 @@
 
 <script setup lang="ts">
 import Breadcrumb from 'primevue/breadcrumb';
+import PrimeToast from 'primevue/toast';
 import { MenuItem } from 'primevue/menuitem';
 import { storeToRefs } from 'pinia';
 import { useAuth } from '~/store/auth';

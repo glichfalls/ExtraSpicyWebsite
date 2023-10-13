@@ -9,7 +9,10 @@ import ProgressSpinner from 'primevue/progressspinner';
 import Skeleton from 'primevue/skeleton';
 import Dialog from 'primevue/dialog';
 import ContextMenu from 'primevue/contextmenu';
+import InlineMessage from 'primevue/inlinemessage';
+
 import 'primevue/resources/themes/lara-dark-blue/theme.css';
+import 'assets/css/primevue.css';
 
 export default defineNuxtPlugin((nuxtApp: any) => {
   nuxtApp.vueApp.use(PrimeVue, { ripple: true });
@@ -22,5 +25,6 @@ export default defineNuxtPlugin((nuxtApp: any) => {
   nuxtApp.vueApp.component('ProgressSpinner', ProgressSpinner);
   nuxtApp.vueApp.component('Skeleton', Skeleton);
   nuxtApp.vueApp.component('Dialog', Dialog);
+  nuxtApp.vueApp.component('InlineMessage', InlineMessage);
   nuxtApp.vueApp.component('ContextMenu', ContextMenu);
 });
