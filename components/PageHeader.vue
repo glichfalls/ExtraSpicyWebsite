@@ -24,17 +24,26 @@ const { isLoggedIn } = storeToRefs(useAuth());
 const items: MenuItem[] = [
   {
     label: 'NFT',
-    icon: 'pi pi-fw pi-money-bill',
+    icon: 'pi pi-bitcoin',
     items: [
       [
         {
           label: 'NFT Management',
           items: [
-            { label: 'List', to: '/collectable' },
+            { label: 'View', to: '/collectable' },
             { label: 'Create', to: '/collectable/create' },
           ]
         },
-      ]
+      ],
+        [
+          {
+            label: 'NFT Effects',
+            items: [
+              { label: 'View', to: '/collectable/effects' },
+              { label: 'Create', to: '/collectable/effects/create' },
+            ]
+          },
+        ]
     ]
   },
   {

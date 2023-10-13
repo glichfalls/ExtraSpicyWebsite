@@ -7,12 +7,16 @@
     </span>
     <span class="p-float-label mt-6 w-full">
       <prime-textarea v-model="formData.description" id="description" class="w-full" />
-      <label for="description">Description</label>
+      <label for="description">Effect Description</label>
     </span>
-    <span v-if="input === null" class="p-float-label mt-6 w-full">
-      <prime-number v-model="formData.price" inputId="price" class="w-full" />
-      <label for="price">Initial price</label>
-    </span>
+    <div class="w-full flex justify-start gap-6">
+      <effect-type-select v-model="formData.type" label="Type" class="w-1/3" />
+      <operator-select v-model="formData.operator" label="Operator" />
+      <span class="p-float-label mt-6 w-full">
+        <prime-number v-model="formData.magnitude" inputId="magnitude" class="w-full" />
+        <label for="magnitude">Magnitude</label>
+      </span>
+    </div>
     <prime-button type="submit" label="Save" class="mt-4" :loading="loading" @click.prevent="submit" />
   </div>
 </template>
@@ -21,6 +25,8 @@ import PrimeButton from 'primevue/button';
 import PrimeNumber from 'primevue/inputnumber';
 import PrimeTextarea from 'primevue/textarea';
 import PrimeInput from 'primevue/inputtext';
+import EffectTypeSelect from '~/components/form/EffectTypeSelect.vue';
+import OperatorSelect from '~/components/form/OperatorSelect.vue';
 
 const props = defineProps({
   input: {
@@ -29,20 +35,62 @@ const props = defineProps({
   },
 });
 
+const { httpPost, httpPut } = useHttp();
+const router = useRouter();
+
 const loading = ref(false);
 
 const formData: {
   name: string;
   description: string;
-  price: number;
+  magnitude: number;
+  operator: string;
+  type: string;
 } = reactive({
   name: '',
   description: '',
-  price: 0,
+  magnitude: 1,
+  operator: '*',
+  type: '',
 });
 
-const submit = () => {
+if (props.input) {
+  formData.name = props.input.name;
+  formData.description = props.input.description;
+  formData.magnitude = props.input.magnitude;
+  formData.operator = props.input.operator;
+  formData.type = props.input.type;
+}
 
+const update = async (id: string) => {
+  try {
+    loading.value = true;
+    await httpPut(`/nft/effects/${id}`, formData);
+  } catch (err) {
+    console.log(err);
+  } finally {
+    loading.value = false;
+  }
+}
+
+const create = async () => {
+  try {
+    loading.value = true;
+    const id = await httpPost(`/nft/effects`, formData);
+    await router.push(`/collectable/effects/${id}`);
+  } catch (err) {
+    console.log(err);
+  } finally {
+    loading.value = false;
+  }
+}
+
+const submit = async () => {
+  if (props.input) {
+    await update(props.input.id);
+  } else {
+    await create();
+  }
 };
 
 </script>
