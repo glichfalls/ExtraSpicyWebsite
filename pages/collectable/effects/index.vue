@@ -39,6 +39,7 @@ const EffectTable: typeof HydraTable<Effect, keyof Effect> = HydraTable;
 const columns: any[] = [
   { title: 'Name', align: 'start', sortable: true, key: 'name' },
   { title: 'Description', align: 'start', sortable: true, key: 'description' },
+  { title: 'Priority', align: 'start', sortable: true, key: 'priority' },
   { title: '', align: 'end', sortable: false, key: 'id' },
 ];
 

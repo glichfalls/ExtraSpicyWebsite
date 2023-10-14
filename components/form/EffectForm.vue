@@ -9,8 +9,13 @@
       <prime-textarea v-model="formData.description" id="description" class="w-full" />
       <label for="description">Effect Description</label>
     </span>
-    <div class="w-full flex justify-start gap-6">
-      <effect-type-select v-model="formData.type" label="Type" class="w-1/3" />
+    <div class="w-full grid grid-cols-4 gap-6">
+      <effect-type-select v-model="formData.type" label="Type" />
+      <span class="p-float-label mt-6 w-full">
+        <prime-number v-model="formData.priority" :max-fraction-digits="0" inputId="priority" class="w-full" />
+        <label for="priority">Priority</label>
+        <span class="text-sm text-gray-500">Higher priority effects are applied first</span>
+      </span>
       <operator-select v-model="formData.operator" label="Operator" />
       <span class="p-float-label mt-6 w-full">
         <prime-number v-model="formData.magnitude" :min-fraction-digits="2" :max-fraction-digits="3" inputId="magnitude" class="w-full" />
@@ -27,6 +32,7 @@ import PrimeTextarea from 'primevue/textarea';
 import PrimeInput from 'primevue/inputtext';
 import EffectTypeSelect from '~/components/form/EffectTypeSelect.vue';
 import OperatorSelect from '~/components/form/OperatorSelect.vue';
+import PrioritySelect from '~/components/form/PrioritySelect.vue';
 
 const props = defineProps({
   input: {
@@ -43,12 +49,14 @@ const loading = ref(false);
 const formData: {
   name: string;
   description: string;
+  priority: number;
   magnitude: number;
   operator: string;
   type: string;
 } = reactive({
   name: '',
   description: '',
+  priority: 100,
   magnitude: 1,
   operator: '*',
   type: '',
@@ -57,6 +65,7 @@ const formData: {
 if (props.input) {
   formData.name = props.input.name;
   formData.description = props.input.description;
+  formData.priority = props.input.priority;
   formData.magnitude = props.input.magnitude;
   formData.operator = props.input.operator;
   formData.type = props.input.type;

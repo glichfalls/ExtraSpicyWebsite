@@ -11,15 +11,29 @@
           <img v-if="data" :src="path(data)" alt="" class="h-12" />
         </template>
         <template #effects="{ data }">
-          <div class="flexgit  flex-wrap gap-2">
+          <div class="flex flex-wrap gap-2">
             <chip v-for="effect in data" :label="effect.name" />
           </div>
         </template>
+        <template #description="{ data }">
+          <div class="w-80 overflow-hidden truncate">
+            <span>{{ data }}</span>
+          </div>
+        </template>
         <template #id="{ data }">
-          <div class="flex justify-start">
-            <prime-button severity="primary" rounded  size="small" @click="router.push(`/collectable/${data}`)">
-              View
-            </prime-button>
+          <div class="flex justify-end gap-4">
+            <prime-button
+                label="View"
+                severity="primary"
+                size="small"
+                @click="router.push(`/collectable/${data}`)"
+            />
+            <prime-button
+                label="Delete"
+                severity="danger"
+                size="small"
+                @click="() => deleteCollectable(data)"
+            />
           </div>
         </template>
       </collectable-table>
@@ -57,5 +71,9 @@ const actions = [
 ];
 
 const onView = (item) => router.push(`/collectable/${item.id}`);
+
+const deleteCollectable = (id: string) => {
+
+}
 
 </script>
