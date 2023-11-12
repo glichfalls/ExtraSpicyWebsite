@@ -1,4 +1,5 @@
 import { User } from "~/store/auth";
+import { ItemAttribute, ItemRarity } from '~/contract/enum';
 
 export interface HydraEntity {
     '@id': string;
@@ -69,20 +70,25 @@ export interface Sticker extends HydraEntity {
     }
 }
 
-export interface Collectable extends HydraEntity {
+export interface Item extends HydraEntity {
     id: string;
     name: string;
     description: string;
+    price: number|null;
+    rarity: ItemRarity;
+    permanent: boolean;
+    attributes: ItemAttribute[];
     imagePublicPath: string|null;
-    tradeable: boolean;
-    isUnique: boolean;
+    effects?: Effect[];
 }
 
-export interface CollectableInstance extends HydraEntity {
+export interface ItemInstance extends HydraEntity {
     id: string;
-    collectable: Collectable;
-    user: User;
-    price: number;
+    item: Item;
+    chat: Chat;
+    owner: User;
+    tradeable: boolean;
+    expiresAt: Date|null;
     createdAt: Date;
     updatedAt: Date;
 }

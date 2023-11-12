@@ -2,7 +2,7 @@
   <card>
     <template #content>
       <collectable-table
-          url="/api/collectables"
+          url="/api/items"
           :columns="columns"
           :actions="actions"
           @view="onView"
@@ -20,13 +20,18 @@
             <span>{{ data }}</span>
           </div>
         </template>
+        <template #rarity="{ data }">
+          <div class="w-80 overflow-hidden truncate">
+            <span>{{ data.label }}</span>
+          </div>
+        </template>
         <template #id="{ data }">
           <div class="flex justify-end gap-4">
             <prime-button
                 label="View"
                 severity="primary"
                 size="small"
-                @click="router.push(`/collectable/${data}`)"
+                @click="router.push(`/items/${data}`)"
             />
             <prime-button
                 label="Delete"
@@ -45,19 +50,19 @@ import Card from 'primevue/card';
 import HydraTable from '~/components/table/HydraTable.vue';
 import PrimeButton from 'primevue/button';
 import Chip from 'primevue/chip';
-import { Collectable } from '~/contract/entity';
+import { Item } from '~/contract/entity';
 
 const router = useRouter();
 const config = useRuntimeConfig();
 
 const path = (url: string) => `${config.public.apiUrl}/${url}`
 
-const CollectableTable: typeof HydraTable<Collectable, keyof Collectable> = HydraTable;
+const CollectableTable: typeof HydraTable<Item, keyof Item> = HydraTable;
 
 const columns: any[] = [
   { title: 'Image', align: 'start', sortable: true, key: 'imagePublicPath' },
   { title: 'Name', align: 'start', sortable: true, key: 'name' },
-  { title: 'Description', align: 'start', sortable: true, key: 'description' },
+  { title: 'Rarity', align: 'start', sortable: true, key: 'rarity' },
   { title: 'Effects', align: 'start', sortable: false, key: 'effects' },
   { title: '', align: 'end', sortable: false, key: 'id' },
 ];
@@ -70,7 +75,7 @@ const actions = [
   }
 ];
 
-const onView = (item) => router.push(`/collectable/${item.id}`);
+const onView = (item) => router.push(`/items/${item.id}`);
 
 const deleteCollectable = (id: string) => {
 

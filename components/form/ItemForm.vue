@@ -13,16 +13,17 @@
       <prime-number v-model="formData.price" inputId="price" class="w-full" />
       <label for="price">Initial price</label>
     </span>
+    <rarity-select v-model="formData.rarity" :limit="1" id="description" class="w-full"  label="Rarity" />
     <chat-select
         v-if="input === null"
-        v-model="formData.chat"
+        v-model="additionalData.chat"
         label="Select Chat"
         :limit="1"
     />
     <user-select
-        v-if="formData.chat.length === 1 && input === null"
-        v-model="formData.users"
-        :chat-id="formData.chat[0]['@id']"
+        v-if="additionalData.chat.length === 1 && input === null"
+        v-model="additionalData.users"
+        :chat-id="additionalData.chat[0]['@id']"
         label="Select Owner(s)"
     />
     <effect-select
@@ -32,12 +33,8 @@
     />
     <div class="flex gap-10 my-3">
       <div class="flex items-center gap-3">
-        <prime-checkbox v-model="formData.tradable" inputId="tradable" :binary="true" />
-        <label for="tradable">Tradable</label>
-      </div>
-      <div class="flex items-center gap-3">
-        <prime-checkbox v-model="formData.unique" inputId="unique" :binary="true" />
-        <label for="unique">Unique</label>
+        <prime-checkbox v-model="formData.permanent" inputId="permanent" :binary="true" />
+        <label for="tradable">Permanent</label>
       </div>
     </div>
     <prime-button type="submit" label="Save" class="mt-4" :loading="loading" @click.prevent="submit" />
@@ -52,55 +49,39 @@ import PrimeNumber from 'primevue/inputnumber';
 import UserSelect from '~/components/form/UserSelect.vue';
 import PrimeTextarea from 'primevue/textarea';
 import PrimeInput from 'primevue/inputtext';
-import { User } from '~/store/auth';
-import { Chat, Effect } from '~/contract/entity';
+import { Chat, Effect, Item } from '~/contract/entity';
 import { useToast } from 'primevue/usetoast';
-import InlineMessage from 'primevue/inlinemessage';
 import EffectSelect from '~/components/form/EffectSelect.vue';
+import RaritySelect from '~/components/form/RaritySelect.vue';
+import { UnwrapNestedRefs } from '@vue/reactivity';
+import { User } from '~/store/auth';
+import { react } from '@babel/types';
 
 const { httpPost, httpPut } = useHttp();
 const toast = useToast();
 const router = useRouter();
 
-const props = defineProps({
-  input: {
-    type: Object,
-    default: null,
-  },
-});
+const props = defineProps<{
+  input?: Item|null;
+}>();
 
 const loading = ref(false);
 
-const formData: {
-  name: string;
-  description: string;
-  price: number;
-  tradable: boolean;
-  unique: boolean;
-  effects: Effect[];
-  users: User[];
-  chat: Chat[];
-} = reactive({
+const defaultData = (): Partial<Item> => ({
   name: '',
   description: '',
-  price: 0,
-  tradable: false,
-  unique: false,
+  price: null,
   effects: [],
+});
+
+const formData: UnwrapNestedRefs<Partial<Item>> = reactive(props.input || defaultData());
+const additionalData = reactive<{
+  chat: Chat[];
+  users: User[];
+}>({
   chat: [],
   users: [],
 });
-
-if (props.input) {
-  formData.name = props.input.name;
-  formData.description = props.input.description;
-  formData.price = props.input.price;
-  formData.tradable = props.input.tradeable;
-  formData.unique = props.input.unique;
-  formData.effects = props.input.effects;
-  formData.chat = [];
-  formData.users = [];
-}
 
 const submit = () => {
   if (props.input) {
@@ -109,14 +90,24 @@ const submit = () => {
   return saveCreate();
 };
 
+const normalize = (id: string|null): object => {
+  const data: any = { ...formData };
+  data.rarity = formData.rarity?.name || null;
+  if (!id) {
+    data.chat = additionalData.chat.map((chat) => chat['@id']);
+    data.users = additionalData.users.map((user) => user['@id']);
+  }
+  return data;
+}
+
 const saveEdit = async () => {
   try {
     loading.value = true;
-    await httpPut<string[]>(`/nft/${props.input.id}`, {
-      ...formData,
-      chat: undefined,
-      users: undefined,
-    });
+    if (!props.input) {
+      toast.add({ severity: 'error', summary: 'Error', detail: 'Item not found', life: 3000 });
+      return;
+    }
+    await httpPut<string[]>(`/nft/${props.input.id}`, normalize(props.input.id));
     toast.add({ severity: 'success', summary: 'Success Message', detail: 'Message Content', life: 3000, group: 'tr' });
   } catch (err) {
     toast.add({ severity: 'error', summary: 'Error', detail: err.message, life: 3000 });
@@ -128,9 +119,9 @@ const saveEdit = async () => {
 const saveCreate = async () => {
   try {
     loading.value = true;
-    const response = await httpPost<string[]>('/nft', formData);
+    const response = await httpPost<string[]>('/nft', normalize(null));
     if (response) {
-      return router.push(`/collectable/${response[0]}`);
+      return router.push(`/items/${response[0]}`);
     }
   } catch (err) {
     toast.add({ severity: 'error', summary: 'Error', detail: err.message, life: 3000 });
@@ -142,11 +133,11 @@ const saveCreate = async () => {
 const resetForm = () => {
   formData.name = '';
   formData.description = '';
-  formData.price = 0;
-  formData.tradable = false;
-  formData.unique = false;
-  formData.chat = [];
-  formData.users = [];
+  formData.permanent = false;
+  formData.price = null;
+  formData.effects = [];
+  additionalData.chat = [];
+  additionalData.users = [];
 };
 
 onBeforeUnmount(() => {

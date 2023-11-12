@@ -12,7 +12,7 @@
 <script setup lang="ts">
 import Card from 'primevue/card';
 import { useToast } from "primevue/usetoast";
-import CollectableForm from '~/components/form/CollectableForm.vue';
+import CollectableForm from '~/components/form/ItemForm.vue';
 
 const toast = useToast();
 
