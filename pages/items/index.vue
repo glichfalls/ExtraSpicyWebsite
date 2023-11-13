@@ -1,56 +1,18 @@
 <template>
   <card>
     <template #content>
-      <collectable-table
-          url="/api/items"
-          :columns="columns"
-          :actions="actions"
-          @view="onView"
-      >
-        <template #imagePublicPath="{ data }">
-          <img v-if="data" :src="path(data)" alt="" class="h-12" />
-        </template>
-        <template #effects="{ data }">
-          <div class="flex flex-wrap gap-2">
-            <chip v-for="effect in data" :label="effect.name" />
-          </div>
-        </template>
-        <template #description="{ data }">
-          <div class="w-80 overflow-hidden truncate">
-            <span>{{ data }}</span>
-          </div>
-        </template>
-        <template #rarity="{ data }">
-          <div class="w-80 overflow-hidden truncate">
-            <span>{{ data.label }}</span>
-          </div>
-        </template>
-        <template #id="{ data }">
-          <div class="flex justify-end gap-4">
-            <prime-button
-                label="View"
-                severity="primary"
-                size="small"
-                @click="router.push(`/items/${data}`)"
-            />
-            <prime-button
-                label="Delete"
-                severity="danger"
-                size="small"
-                @click="() => deleteCollectable(data)"
-            />
-          </div>
-        </template>
-      </collectable-table>
+      <item-grid
+        url="/api/items"
+        @view="onView"
+      />
     </template>
   </card>
 </template>
 <script setup lang="ts">
 import Card from 'primevue/card';
 import HydraTable from '~/components/table/HydraTable.vue';
-import PrimeButton from 'primevue/button';
-import Chip from 'primevue/chip';
 import { Item } from '~/contract/entity';
+import ItemGrid from '~/components/entity/item/ItemGrid.vue';
 
 const router = useRouter();
 const config = useRuntimeConfig();
