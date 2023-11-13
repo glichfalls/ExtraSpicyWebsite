@@ -182,10 +182,6 @@ const scrollToBottom = (): void => {
   @apply font-light;
   @apply w-auto max-w-[600px];
 
-  &.highlight {
-    @apply bg-primary-dark;
-  }
-
   .user {
     @apply font-bold;
     @apply block;
