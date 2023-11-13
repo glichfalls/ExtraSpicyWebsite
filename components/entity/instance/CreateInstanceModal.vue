@@ -19,6 +19,10 @@
             label="Select Owner(s)"
         />
         <div class="flex items-center gap-3">
+          <calendar v-model="formData.expiresAt" inputId="expiresAt" />
+          <label for="expiresAt">Expires at</label>
+        </div>
+        <div class="flex items-center gap-3">
           <prime-checkbox v-model="formData.tradeable" inputId="tradeable" :binary="true" />
           <label for="tradable">Tradeable</label>
         </div>

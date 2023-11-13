@@ -30,8 +30,8 @@ const items: MenuItem[] = [
         {
           label: 'Item Management',
           items: [
-            { label: 'View', to: '/items' },
-            { label: 'Create', to: '/items/create' },
+            { label: 'View', command: () => navigateTo('/items') },
+            { label: 'Create', command: () => navigateTo('/items/create') },
           ]
         },
       ],
@@ -39,8 +39,8 @@ const items: MenuItem[] = [
           {
             label: 'Item Effects',
             items: [
-              { label: 'View', to: '/items/effects' },
-              { label: 'Create', to: '/items/effects/create' },
+              { label: 'View', command: () => navigateTo('/items/effects') },
+              { label: 'Create', command: () => navigateTo('/items/effects/create') },
             ]
           },
         ]
@@ -54,7 +54,7 @@ const items: MenuItem[] = [
         {
           label: 'Stocks',
           items: [
-            { label: 'Portfolio', to: '/stocks/portfolio' }
+            { label: 'Portfolio', command: () => navigateTo('/stocks/portfolio') }
           ]
         },
       ],
@@ -63,7 +63,7 @@ const items: MenuItem[] = [
   {
     label: 'Logout',
     icon: 'pi pi-fw pi-sign-out',
-    to: '/logout',
+    command: () => navigateTo('/logout'),
   }
 ];
 

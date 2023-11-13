@@ -6,7 +6,7 @@ export default defineNuxtConfig({
       viewport: 'width=device-width, initial-scale=1',
       htmlAttrs: {
         class: 'dark',
-      }
+      },
     }
   },
   modules: [
@@ -15,6 +15,7 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@vueuse/nuxt',
     '@nuxtjs/i18n',
+    'nuxt-primevue',
     [
       '@nuxtjs/google-fonts',
       {
@@ -36,7 +37,6 @@ export default defineNuxtConfig({
   build: {
     transpile: [
       'vue-qr',
-      'primevue',
     ],
   },
   postcss: {
@@ -48,7 +48,8 @@ export default defineNuxtConfig({
   },
   css: [
     '~/assets/css/tailwind.css',
-    '~/assets/css/main.scss',
+    '~/assets/css/theme_primevue.css',
+    'primeflex/primeflex.css',
   ],
   runtimeConfig: {
     public: {
@@ -64,11 +65,10 @@ export default defineNuxtConfig({
       src: '~/plugins/vue3-particles.ts',
       mode: 'client',
     },
-    {
-      src: '~/plugins/primevue.ts',
-      mode: 'client',
-    }
   ],
+  primevue: {
+    usePrimeVue: true,
+  },
   i18n: {
     experimental: {
       jsTsFormatResource: true,
