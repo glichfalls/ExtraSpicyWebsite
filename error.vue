@@ -5,7 +5,7 @@
         <div class="flex flex-col items-center justify-center h-full">
           <div class="text-4xl font-bold text-center text-gray-100">{{ error?.statusCode }}</div>
           <div class="text-2xl font-bold text-center text-gray-400">{{ error?.message }}</div>
-          <nuxt-link to="/" class="bg-primary text-white px-2 py-1 rounded-lg mt-4">
+          <nuxt-link to="/" class="px-2 py-1 rounded-lg mt-4">
             Home
           </nuxt-link>
         </div>

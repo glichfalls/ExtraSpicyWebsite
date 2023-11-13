@@ -2,9 +2,9 @@
   <div v-if="isLoggedIn" class="w-full min-h-[50vh] flex flex-col gap-8 justify-center items-center">
 
     <div class="flex flex-col lg:flex-row gap-4">
-      <button v-if="!rickroll" class="bg-primary text-white py-2 px-4 rounded hover:bg-primary-500" @click="start">
+      <prime-button v-if="!rickroll" @click="start">
         NFT
-      </button>
+      </prime-button>
     </div>
 
     <div v-if="rickroll">
@@ -41,6 +41,7 @@ import { useAuth } from '~/store/auth';
 import { loadFull } from 'tsparticles';
 import video from '~/assets/video/rickroll.mp4';
 import { storeToRefs } from 'pinia';
+import PrimeButton from 'primevue/button';
 
 const { isLoggedIn, user } = storeToRefs(useAuth());
 const { httpPost } = useHttp();

@@ -59,7 +59,7 @@ onMounted(() => {
   @apply my-4;
 }
 .label {
-  @apply bg-primary text-white;
+  @apply text-white;
   @apply py-1 px-3 rounded-full;
   @apply text-xs;
 }

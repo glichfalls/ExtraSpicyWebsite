@@ -28,7 +28,7 @@
         <div class="">
           <div class="text-sm">
             We cant find your username.
-            Start a Chat with <telegram-logo /> <a class="text-primary" target="_blank" href="https://t.me/ExtraSpicySpamBot">the bot</a> and send him a message.
+            Start a Chat with <telegram-logo /> <a class="font-bold" target="_blank" href="https://t.me/ExtraSpicySpamBot">the bot</a> and send him a message.
           </div>
           <div class="mt-2" v-if="loading">
             <i class="pi pi-spin pi-spinner"></i>
