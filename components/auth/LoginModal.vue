@@ -1,12 +1,12 @@
 <template>
-  <Dialog v-model:visible="isOpen" modal :closable="false">
+  <Dialog v-model:visible="isOpen" modal :closable="false" class="min-w-[400px] max-w-[600px] w-2/3 lg:w-4 xl:w-3">
     <template #header>
       <span class="text-lg font-semibold text-white">
         <span v-if="submitted">Telegram Login Link sent</span>
         <span v-else>Telegram Login Required</span>
       </span>
     </template>
-    <div class="w-full md:w-[400px] flex flex-col">
+    <div class="w-full flex flex-col">
       <div class="w-2/3" v-if="submitted">
         We sent you a link to your Telegram account. Click on it to login.
         <span class="block mt-4" v-if="link">
@@ -14,13 +14,12 @@
         </span>
       </div>
       <img src="/branding/logo-sm.png" alt="Extra Spicy Spam" class="absolute w-32 right-2 top-2" />
-      <login-form v-if="!submitted" @submit="submit" class="w-2/3" />
+      <login-form v-if="!submitted" @submit="submit" />
     </div>
   </Dialog>
 </template>
 
 <script setup lang="ts">
-import Dialog from 'primevue/dialog';
 import LoginForm from '~/components/auth/LoginForm.vue';
 
 const submitted = ref(false);
