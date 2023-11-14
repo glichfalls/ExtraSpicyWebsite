@@ -41,7 +41,11 @@ import UserSelect from '~/components/form/UserSelect.vue';
 import { User } from '~/store/auth';
 import PrimeCheckbox from 'primevue/checkbox';
 
-const props = defineProps<{ instance: Item }>();
+interface Props {
+  item: Item;
+}
+
+const props = defineProps<Props>();
 
 const emit = defineEmits(['close', 'success']);
 
@@ -71,9 +75,10 @@ const formData = reactive<{
 const submit = async () => {
   try {
     loading.value = true;
-    await httpPost(`/nft/${props.instance.id}/instances`, {
+    await httpPost('/item_instances', {
       chat: formData.chat[0].id,
-      users: formData.users,
+      user: formData.users[0].id,
+      item: props.item['@id'],
       tradeable: formData.tradeable,
       expiresAt: formData.expiresAt,
       payload: formData.payload,

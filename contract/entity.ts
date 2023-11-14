@@ -79,7 +79,7 @@ export interface Item extends HydraEntity {
     permanent: boolean;
     attributes: ItemAttribute[];
     imagePublicPath: string|null;
-    effects?: Effect[];
+    effects: Effect[];
 }
 
 export interface ItemInstance extends HydraEntity {
@@ -89,6 +89,7 @@ export interface ItemInstance extends HydraEntity {
     owner: User;
     tradeable: boolean;
     expiresAt: Date|null;
+    payload: any;
     createdAt: Date;
     updatedAt: Date;
 }

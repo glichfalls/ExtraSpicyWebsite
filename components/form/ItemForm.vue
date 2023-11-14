@@ -14,18 +14,6 @@
       <label for="price">Initial price</label>
     </span>
     <rarity-select v-model="formData.rarity" :limit="1" id="description" class="w-full"  label="Rarity" />
-    <chat-select
-        v-if="input === null"
-        v-model="additionalData.chat"
-        label="Select Chat"
-        :limit="1"
-    />
-    <user-select
-        v-if="additionalData.chat.length === 1 && input === null"
-        v-model="additionalData.users"
-        :chat-id="additionalData.chat[0]['@id']"
-        label="Select Owner(s)"
-    />
     <effect-select
         v-if="input !== null"
         v-model="formData.effects"
@@ -56,32 +44,34 @@ import RaritySelect from '~/components/form/RaritySelect.vue';
 import { UnwrapNestedRefs } from '@vue/reactivity';
 import { User } from '~/store/auth';
 import { react } from '@babel/types';
+import { ItemRarity, ItemRarityEnum } from "~/contract/enum";
 
 const { httpPost, httpPut } = useHttp();
 const toast = useToast();
 const router = useRouter();
 
-const props = defineProps<{
+interface Props {
   input?: Item|null;
-}>();
+}
+
+type ItemData = Partial<Item> & Required<Pick<Item, 'name' | 'description' | 'permanent' | 'price' | 'imagePublicPath' | 'attributes' | 'effects'>>;
+
+const props = defineProps<Props>();
 
 const loading = ref(false);
 
-const defaultData = (): Partial<Item> => ({
+const defaultData = (): ItemData => ({
   name: '',
   description: '',
+  permanent: true,
   price: null,
   effects: [],
+  attributes: [],
+  rarity: undefined,
+  imagePublicPath: null,
 });
 
-const formData: UnwrapNestedRefs<Partial<Item>> = reactive(props.input || defaultData());
-const additionalData = reactive<{
-  chat: Chat[];
-  users: User[];
-}>({
-  chat: [],
-  users: [],
-});
+const formData: UnwrapNestedRefs<ItemData> = reactive(props.input ?? defaultData());
 
 const submit = () => {
   if (props.input) {
@@ -90,15 +80,11 @@ const submit = () => {
   return saveCreate();
 };
 
-const normalize = (id: string|null): object => {
+const normalized = computed(() => {
   const data: any = { ...formData };
   data.rarity = formData.rarity?.name || null;
-  if (!id) {
-    data.chat = additionalData.chat.map((chat) => chat['@id']);
-    data.users = additionalData.users.map((user) => user['@id']);
-  }
   return data;
-}
+});
 
 const saveEdit = async () => {
   try {
@@ -107,7 +93,7 @@ const saveEdit = async () => {
       toast.add({ severity: 'error', summary: 'Error', detail: 'Item not found', life: 3000 });
       return;
     }
-    await httpPut<string[]>(`/nft/${props.input.id}`, normalize(props.input.id));
+    await httpPut(props.input['@id'], normalized.value);
     toast.add({ severity: 'success', summary: 'Success Message', detail: 'Message Content', life: 3000, group: 'tr' });
   } catch (err) {
     toast.add({ severity: 'error', summary: 'Error', detail: err.message, life: 3000 });
@@ -119,9 +105,9 @@ const saveEdit = async () => {
 const saveCreate = async () => {
   try {
     loading.value = true;
-    const response = await httpPost<string[]>('/nft', normalize(null));
-    if (response) {
-      return router.push(`/items/${response[0]}`);
+    const item = await httpPost<Item>('/api/items', normalized.value);
+    if (item) {
+      return router.push(`/items/${item.id}`);
     }
   } catch (err) {
     toast.add({ severity: 'error', summary: 'Error', detail: err.message, life: 3000 });
@@ -136,8 +122,6 @@ const resetForm = () => {
   formData.permanent = false;
   formData.price = null;
   formData.effects = [];
-  additionalData.chat = [];
-  additionalData.users = [];
 };
 
 onBeforeUnmount(() => {

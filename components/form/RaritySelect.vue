@@ -26,7 +26,7 @@ const { rarities } = useEnum();
 const emit = defineEmits(['update:modelValue']);
 
 const props = defineProps<{
-  modelValue: ItemRarity;
+  modelValue: ItemRarity|undefined;
   label?: string;
   limit?: number;
 }>();

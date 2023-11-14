@@ -42,7 +42,7 @@
         </item-instance-table>
         <create-instance-modal
             v-if="createInstance && item !== null"
-            :collectable="item"
+            :item="item"
             @close="closeModal"
             @success="reload"
         />

@@ -8,3 +8,10 @@ export type ItemRarity = {
 }
 
 export type ItemAttribute = 'executable'|string;
+
+export enum ItemRarityEnum {
+  Common = 'common',
+  Rare = 'rare',
+  Epic = 'epic',
+  Legendary = 'legendary',
+}
