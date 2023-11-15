@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full pt-6">
+  <div class="w-full pt-4">
     <span class="p-float-label">
       <multi-select
           v-model="internalValue"

@@ -1,54 +1,51 @@
 <template>
-  <div class="grid grid-cols-1 gap-6 pb-12">
-    <card>
-      <template #title>
-        {{ item?.name }}
-      </template>
-      <template #content>
-        <div v-if="item" class="grid grid-cols-2 gap-8">
-          <item-form :input="item" />
-          <item-image-form :input="item" @upload:success="load" />
-        </div>
-      </template>
-    </card>
-    <card>
-      <template #title>
-        <div class="flex justify-between items-center">
-          <span>Instances</span>
-          <div>
-            <prime-button
-                size="small"
-                severity="secondary"
-                label="Create instance"
-                @click="openModal"
-            />
-          </div>
-        </div>
-      </template>
-      <template #content>
-        <item-instance-table :url="instanceUrl" :columns="columns">
-          <template #chat="{ data }">
-            {{ data.name }}
-          </template>
-          <template #tradeable="{ data }">
-            {{ data ? 'Yes' : 'No' }}
-          </template>
-          <template #expiresAt="{ data }">
-            {{ formatExpiresAt(data) }}
-          </template>
-          <template #owner="{ data }">
-            {{ data?.name ?? 'Nobody' }}
-          </template>
-        </item-instance-table>
-        <create-instance-modal
-            v-if="createInstance && item !== null"
-            :item="item"
-            @close="closeModal"
-            @success="reload"
+  <tab-view>
+    <tab-panel header="Details">
+      <div class="flex justify-between items-start h-16">
+        <span class="text-xl font-bold">Details</span>
+      </div>
+      <div class="flex gap-4">
+        <item-image-form :input="item" @upload:success="load" class="w-4" />
+        <item-form v-model="item" />
+      </div>
+    </tab-panel>
+    <tab-panel header="Instances">
+      <div class="flex justify-between items-start h-16">
+        <span class="text-xl font-bold">Instances</span>
+        <prime-button
+            size="small"
+            severity="secondary"
+            label="Create instance"
+            @click="openModal"
         />
-      </template>
-    </card>
-  </div>
+      </div>
+      <item-instance-table :url="instanceUrl" :columns="columns">
+        <template #chat="{ data }">
+          {{ data.name }}
+        </template>
+        <template #tradeable="{ data }">
+          {{ data ? 'Yes' : 'No' }}
+        </template>
+        <template #expiresAt="{ data }">
+          {{ formatExpiresAt(data) }}
+        </template>
+        <template #owner="{ data }">
+          <span v-if="data">
+            {{ data?.['@id'] }}
+          </span>
+          <span v-else>
+            None
+          </span>
+        </template>
+      </item-instance-table>
+      <create-instance-modal
+          v-if="createInstance && item !== null"
+          :item="item"
+          @close="closeModal"
+          @success="reload"
+      />
+    </tab-panel>
+  </tab-view>
 </template>
 
 <script setup lang="ts">

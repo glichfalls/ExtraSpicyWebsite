@@ -1,9 +1,10 @@
 <template>
   <data-view
-      title="test"
-    :value="items"
+    :value="viewItems"
     :layout="layout"
-    :total-records="total"
+    :paginator="true"
+    :rows="18"
+    :total-records="loading ? 18 : total"
     data-key="@id"
   >
     <template #header>
@@ -22,19 +23,33 @@
       </div>
     </template>
     <template #grid="slotProps">
-      <div class="col-12 sm:col-6 lg:col-12 xl:col-2 p-2">
+      <div v-if="loading" class="col-12 sm:col-6 lg:col-12 xl:col-4 p-2">
+        <div class="p-4 border-1 surface-border surface-card border-round">
+          <div class="flex flex-column align-items-center gap-3 py-5">
+            <Skeleton class="w-9 shadow-2 border-round h-10rem" />
+            <Skeleton class="w-9 shadow-2 border-round h-3rem" />
+          </div>
+        </div>
+      </div>
+      <div v-else class="col-12 sm:col-6 lg:col-12 xl:col-2 p-2">
         <div class="p-3 border-1 surface-border surface-card border-round">
           <img
               v-if="slotProps.data.imagePublicPath !== null"
               :src="path(slotProps.data.imagePublicPath)"
               :alt="slotProps.data.name"
               class="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round"
-              @error="event => event.target.src = '/images/default.png'"
+              @error="(event: any) => event.target.src = '/images/default.png'"
           />
           <img v-else src="/images/default.png" alt="Default Image" />
-          <span class="font-bold text-lg py-2 block">{{ slotProps.data.name }}</span>
+          <div class="overflow-hidden h-10">
+            <span class="font-bold text-lg py-2 block">{{ shorten(slotProps.data.name, 18) }}</span>
+          </div>
           <span class="block">{{ slotProps.data.rarity.label }}</span>
-          <p class="text-sm py-2 w-full overflow-hidden text-gray-100">{{ slotProps.data.description.slice(0, 50) + (slotProps.data.description.length > 50 ? '...' : '') }}</p>
+          <div class="overflow-hidden h-14">
+            <p class="text-sm py-2 w-fulltext-gray-100">
+              {{ shorten(slotProps.data.description, 50) }}
+            </p>
+          </div>
           <prime-button label="edit" size="small" rounded @click="navigateTo(`/items/${slotProps.data['id']}`)" />
         </div>
       </div>
@@ -61,12 +76,26 @@ const config = useRuntimeConfig();
 
 const path = (url: string) => `${config.public.apiUrl}/${url}`
 
+const shorten = (text: string, maxLength: number): string => {
+  if (text.length > maxLength) {
+    return text.slice(0, maxLength).split(' ').slice(0, -1).join(' ') + '...';
+  }
+  return text;
+}
+
 const items = ref<Item[]>(props.data || []) as Ref<Item[]>;
 const total = ref<number>(0);
 const page = ref<number>(1);
 const itemsPerPage = ref<number>(30);
 const layout = ref<'list'|'grid'>('grid');
 const loading = ref<boolean>(false);
+
+const viewItems = computed(() => {
+  if (loading.value) {
+    return Array.from({ length: itemsPerPage.value }, () => ({}));
+  }
+  return items.value;
+})
 
 const load = async ({
   page = 1,

@@ -67,9 +67,6 @@ export const useHttp = () => {
 
   const httpAuthGet = async <T>(endpoint: string, data: any = undefined, options: HttpFetchOptions = { cache: true }): Promise<T> => {
     const authGetHeaders: any = headers.value;
-    if (hasCache(endpoint) && options.cache) {
-      return getCache(endpoint);
-    }
     if (auth.token) {
       authGetHeaders.Authorization = `Bearer ${auth.token}`;
     }
