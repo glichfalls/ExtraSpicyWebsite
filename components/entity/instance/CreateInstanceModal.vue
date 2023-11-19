@@ -19,14 +19,22 @@
             label="Select Owner(s)"
         />
         <div class="flex items-center gap-3">
-          <calendar v-model="formData.expiresAt" inputId="expiresAt" />
-          <label for="expiresAt">Expires at</label>
+          <prime-checkbox v-model="formData.expires" inputId="expires" :binary="true" />
+          <label for="expires">Expires</label>
+        </div>
+        <div v-if="formData.expires" class="flex flex-col">
+          <label for="expiresAt" class="mb-2">Expires at</label>
+          <calendar
+              v-model="formData.expiresAt"
+              inputId="expiresAt"
+              date-format="dd.mm.yy"
+          />
         </div>
         <div class="flex items-center gap-3">
           <prime-checkbox v-model="formData.tradeable" inputId="tradeable" :binary="true" />
           <label for="tradable">Tradeable</label>
         </div>
-        <prime-button label="save" class="mt-6" @click="submit" />
+        <prime-button label="save" class="mt-2" :disabled="!formData.chat.length" @click="submit" />
       </div>
     </template>
   </Dialog>
@@ -35,7 +43,7 @@
 <script setup lang="ts">
 import Dialog from 'primevue/dialog';
 import PrimeButton from 'primevue/button';
-import { Chat, Item, ItemInstance } from '~/contract/entity';
+import { Chat, Item } from '~/contract/entity';
 import ChatSelect from '~/components/form/ChatSelect.vue';
 import UserSelect from '~/components/form/UserSelect.vue';
 import { User } from '~/store/auth';
@@ -62,27 +70,38 @@ const formData = reactive<{
   chat: Chat[];
   users: User[];
   tradeable: boolean;
+  expires: boolean;
   expiresAt: Date|null;
   payload: object|Array<any>;
 }>({
   chat: [],
   users: [],
   tradeable: false,
+  expires: false,
   expiresAt: null,
   payload: [],
+});
+
+const normalized = computed(() => {
+  const data = {
+    chat: formData.chat[0]['@id'],
+    item: props.item['@id'],
+    tradeable: formData.tradeable,
+    payload: formData.payload,
+  }
+  if (formData.users.length) {
+    data.user = formData.users[0]['@id'];
+  }
+  if (formData.expires) {
+    data.expiresAt = formData.expiresAt;
+  }
+  return data;
 });
 
 const submit = async () => {
   try {
     loading.value = true;
-    await httpPost('/item_instances', {
-      chat: formData.chat[0].id,
-      user: formData.users[0].id,
-      item: props.item['@id'],
-      tradeable: formData.tradeable,
-      expiresAt: formData.expiresAt,
-      payload: formData.payload,
-    });
+    await httpPost('/api/item_instances', normalized.value);
     open.value = false;
     emit('success');
   } catch (err) {

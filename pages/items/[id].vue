@@ -37,6 +37,17 @@
             None
           </span>
         </template>
+        <template #id="{ data }">
+          <div class="flex justify-end">
+            <prime-button
+                severity="danger"
+                size="small"
+                label="delete"
+                rounded
+                @click="deleteInstance(data)"
+            />
+          </div>
+        </template>
       </item-instance-table>
       <create-instance-modal
           v-if="createInstance && item !== null"
@@ -54,11 +65,13 @@ import ItemImageForm from '~/components/form/ItemImageForm.vue';
 import { Item, ItemInstance } from '~/contract/entity';
 import HydraTable from '~/components/table/HydraTable.vue';
 import PrimeButton from 'primevue/button';
+import { useToast } from 'primevue/usetoast';
 import CreateInstanceModal from '~/components/entity/instance/CreateInstanceModal.vue';
-import { loading } from '@nuxt/ui-templates';
 
 const route = useRoute();
+const toast = useToast();
 const { getById } = useEntity<Item>('items');
+const { httpDelete } = useHttp();
 
 const ItemInstanceTable: typeof HydraTable<ItemInstance, keyof ItemInstance> = HydraTable;
 const instanceUrl = computed((): string => `/api/item_instances?item.id=${route.params.id}`);
@@ -94,6 +107,7 @@ const columns: any[] = [
   { title: 'Tradable', align: 'start', sortable: true, key: 'tradeable'},
   { title: 'Expires', align: 'start', sortable: true, key: 'expiresAt'},
   { title: 'Owner', align: 'start', sortable: true, key: 'owner' },
+  { title: '', align: 'end', sortable: false, key: 'id' },
 ];
 
 const formatExpiresAt = (expiresAt: string|null): string => {
@@ -109,6 +123,15 @@ const formatExpiresAt = (expiresAt: string|null): string => {
   const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
   return `in ${days} days`;
 };
+
+const deleteInstance = async (id: string) => {
+  try {
+    await httpDelete(`/api/item_instances/${id}`);
+    toast.add({ severity: 'success', summary: 'Success Message', detail: 'Message Content', life: 3000, group: 'tr' });
+  } catch (e) {
+    toast.add({ severity: 'error', summary: 'Error', detail: e.message, life: 3000 });
+  }
+}
 
 load();
 

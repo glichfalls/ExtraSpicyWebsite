@@ -16,6 +16,7 @@
           </slot>
         </template>
       </column>
+      <slot name="actions" :data="data" />
     </data-table>
   </div>
 </template>
@@ -112,7 +113,6 @@ const load = async ({
   if (props.url) {
     try {
       loading.value = true;
-      console.log('load', props.url, page, filterQuery.value);
       const response = await httpAuthGet<HydraResponse<T>>(props.url, {
         page: page,
         ...filterQuery.value,
