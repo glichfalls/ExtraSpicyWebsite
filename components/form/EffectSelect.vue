@@ -2,7 +2,7 @@
   <div class="w-full pt-4">
     <span class="p-float-label">
       <multi-select
-          v-model="value"
+          v-model="internalValue"
           :options="effects"
           optionLabel="name"
           placeholder="Select Effects"
@@ -27,24 +27,32 @@
 import MultiSelect from 'primevue/multiselect';
 import { Effect } from '~/contract/entity';
 
-const emit = defineEmits(['update:modelValue']);
-
 const props = defineProps<{
   modelValue: Effect[];
   label: string;
 }>();
 
-const value = ref(props.modelValue);
-const loading = ref(true);
+const emit = defineEmits(['update:modelValue']);
 
 const { getAll } = useEntity<Effect>('effects');
 
-const effects = ref<Effect[]>(await getAll());
+const internalValue = ref<Effect[]>(props.modelValue);
+const effects = ref<Effect[]>([]);
+const loading = ref<boolean>(false);
 
-loading.value = false;
+watch(() => props.modelValue, (newValue: Effect[]) => {
+  internalValue.value = newValue;
+});
 
-watch(value, (newValue) => {
+watch(internalValue, (newValue: Effect[]) => {
   emit('update:modelValue', newValue);
+});
+
+onBeforeMount(async () => {
+  console.log('EffectSelect onBeforeMount');
+  loading.value = true;
+  effects.value = await getAll();
+  loading.value = false;
 });
 
 </script>

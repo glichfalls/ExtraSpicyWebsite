@@ -33,8 +33,16 @@ const props = defineProps<{
 
 const internalValue = ref<ItemRarity[]>(props.modelValue ? [props.modelValue] : []);
 
+watch(() => props.modelValue, (newValue: ItemRarity|undefined) => {
+  internalValue.value = newValue ? [newValue] : [];
+});
+
 watch(internalValue, (newValue) => {
-  emit('update:modelValue', newValue);
+  if (props?.limit === 1) {
+    emit('update:modelValue', newValue[0] || undefined);
+  } else {
+    emit('update:modelValue', newValue);
+  }
 });
 
 </script>

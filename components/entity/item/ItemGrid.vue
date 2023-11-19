@@ -9,12 +9,17 @@
   >
     <template #header>
       <div class="flex justify-between">
-        <div>
+        <div class="flex items-center">
           <span class="text-xl text-white">
             All Items
           </span>
         </div>
-        <DataViewLayoutOptions v-model="layout" />
+        <div class="flex justify-start items-center gap-2">
+          <router-link to="/items/create" class="p-button p-button-link">
+            Create Item
+          </router-link>
+          <DataViewLayoutOptions v-model="layout" />
+        </div>
       </div>
     </template>
     <template #list="slotProps">

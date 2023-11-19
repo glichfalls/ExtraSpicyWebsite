@@ -1,6 +1,7 @@
 import { ItemRarity } from '~/contract/enum';
+import { defineStore } from 'pinia';
 
-export const useEnum = () => {
+export const useEnum = defineStore('enum', () => {
   const { httpAuthGet } = useHttp();
 
   const rarities = reactive<{
@@ -12,9 +13,7 @@ export const useEnum = () => {
   });
 
   onMounted(async () => {
-    console.log('useEnum onMounted');
     if (rarities.items.length === 0) {
-      console.log('useEnum onMounted loading');
       rarities.loading = true;
       rarities.items = await httpAuthGet<Array<ItemRarity>>('/enum/rarity');
       rarities.loading = false;
@@ -24,4 +23,4 @@ export const useEnum = () => {
   return {
     rarities,
   };
-}
+});

@@ -50,6 +50,7 @@ export default defineNuxtConfig({
     '~/assets/css/tailwind.css',
     '~/assets/css/theme_primevue.css',
     'primeflex/primeflex.css',
+    'primeicons/primeicons.css',
   ],
   runtimeConfig: {
     public: {

@@ -4,9 +4,9 @@
       <div class="flex justify-between items-start h-16">
         <span class="text-xl font-bold">Details</span>
       </div>
-      <div class="flex gap-4">
-        <item-image-form :input="item" @upload:success="load" class="w-4" />
-        <item-form v-model="item" />
+      <div class="flex flex-col md:flex-row gap-6">
+        <item-image-form :input="item" @upload:success="load" class="w-full lg:w-4" />
+        <item-form v-model="item" :loading="loading" />
       </div>
     </tab-panel>
     <tab-panel header="Instances">
@@ -49,26 +49,29 @@
 </template>
 
 <script setup lang="ts">
-import Card from 'primevue/card';
 import ItemForm from '~/components/form/ItemForm.vue';
 import ItemImageForm from '~/components/form/ItemImageForm.vue';
 import { Item, ItemInstance } from '~/contract/entity';
 import HydraTable from '~/components/table/HydraTable.vue';
 import PrimeButton from 'primevue/button';
 import CreateInstanceModal from '~/components/entity/instance/CreateInstanceModal.vue';
+import { loading } from '@nuxt/ui-templates';
 
 const route = useRoute();
 const { getById } = useEntity<Item>('items');
 
 const ItemInstanceTable: typeof HydraTable<ItemInstance, keyof ItemInstance> = HydraTable;
-const instanceUrl = computed((): string => `/api/item_instances?item=${route.params.id}`);
+const instanceUrl = computed((): string => `/api/item_instances?item.id=${route.params.id}`);
 
+const loading = ref(false);
 const item = ref<Item|null>(null);
 const createInstance = ref<boolean>(false);
 
 const load = async () => {
   if (route.params.id) {
+    loading.value = true;
     item.value = await getById(route.params.id as string);
+    loading.value = false;
   } else {
     item.value = null;
   }
@@ -107,6 +110,6 @@ const formatExpiresAt = (expiresAt: string|null): string => {
   return `in ${days} days`;
 };
 
-await load();
+load();
 
 </script>

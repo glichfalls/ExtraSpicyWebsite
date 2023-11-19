@@ -79,7 +79,7 @@ export interface Item extends HydraEntity {
     permanent: boolean;
     attributes: ItemAttribute[];
     imagePublicPath: string|null;
-    effects: Effect[];
+    effects: ItemEffect[];
 }
 
 export interface ItemInstance extends HydraEntity {
@@ -101,4 +101,10 @@ export interface Effect extends HydraEntity {
     type: string;
     operator: string;
     magnitude: number;
+}
+
+export interface ItemEffect extends HydraEntity {
+    id: string;
+    item: Item;
+    effect: Effect;
 }

@@ -1,6 +1,11 @@
 <template>
   <div class="flex flex-col items-start gap-2 w-full">
-    <img v-if="imageUrl" :src="imageUrl" class="h-80" @error="imageSrcError = true;" />
+    <prime-image
+      v-if="imageUrl"
+      :src="imageUrl"
+      :preview="true"
+      @error="imageSrcError = true;"
+     />
     <prime-file-upload
         v-else
         :multiple="false"
@@ -18,18 +23,19 @@
 
 <script setup lang="ts">
 import PrimeFileUpload, { FileUploadUploaderEvent } from 'primevue/fileupload';
+import PrimeImage from 'primevue/image';
+import { Item } from '~/contract/entity';
+
+interface Props {
+  input: Item|null;
+}
 
 const { httpPost } = useHttp();
 const config = useRuntimeConfig();
 
 const emit = defineEmits(['upload:success']);
 
-const props = defineProps({
-  input: {
-    type: Object,
-    default: null,
-  },
-});
+const props = defineProps<Props>();
 
 const imageSrcError = ref(false);
 const imageUrl = computed(() => {
